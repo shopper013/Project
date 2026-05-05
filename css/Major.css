@@ -45,22 +45,38 @@ body {
     text-decoration: none;
     font-size: 1rem;
     font-weight: 500;
+<<<<<<< HEAD
     opacity: 0.9;
     height: 100%;
     display: flex;
     align-items: center;
     padding: 0 15px;
     transition: background-color 0.3s;
+=======
+    opacity: 0.8;
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+
+.navbar .nav-links a:hover {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+>>>>>>> f1ffabb4ab6df0b4363ff15d94698ce29c11c62a
 }
 
 .navbar .nav-links a.active {
     opacity: 1;
+<<<<<<< HEAD
     background-color: #3a8bb9; /* Darker blue highlight */
 }
 
 .navbar .nav-links a:hover {
     opacity: 1;
     background-color: rgba(255, 255, 255, 0.1);
+=======
+    background-color: rgba(255, 255, 255, 0.4);
+>>>>>>> f1ffabb4ab6df0b4363ff15d94698ce29c11c62a
 }
 
 /* Dropdown Container */
@@ -85,11 +101,11 @@ body {
 /* Dropdown Links */
 .dropdown-content a {
     color: #333 !important;
-    padding: 20px 25px; /* Larger padding */
+    padding: 24px 30px; /* Larger padding */
     text-decoration: none;
     display: block;
     text-align: left; /* Align text to left */
-    font-size: 1rem !important;
+    font-size: 1.15rem !important;
     opacity: 1 !important;
     transition: background-color 0.2s, color 0.2s;
     border-bottom: 2px solid #e0e0e0; /* Border between items */
@@ -109,6 +125,8 @@ body {
 /* Profile Dropdown Specific Styles */
 .profile-link {
     background-color: #fff3e0; /* Light cream/orange */
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
 }
 
 .profile-link i {
@@ -117,6 +135,8 @@ body {
 
 .logout-link {
     background-color: #f1f8e9; /* Light green/white */
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
 }
 
 .logout-link i {
@@ -128,9 +148,9 @@ body {
 }
 
 .icon-spacing {
-    margin-right: 10px;
+    margin-right: 12px;
     color: #666; /* Slightly lighter icon color */
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     vertical-align: middle;
 }
 
