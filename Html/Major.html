@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/ex_page.css">
+    <link rel="stylesheet" href="../css/Major.css">
     <title>Activity MOD FIET</title>
 </head>
 <body>
@@ -16,7 +16,7 @@
         <nav class="nav-links">
             <a href="/Html/Homepage.html">หน้าหลัก</a>
             <a href="#">กิจกรรม</a>
-            <a href="#">สาขาวิชา</a>
+            <a href="#" class="active">สาขาวิชา</a>
             <div class="dropdown profile-dropdown-container">
                 <a href="#" class="dropbtn" id="profileMenuBtn"><i class="fa-solid fa-bars menu-icon" style="font-size: 1.2rem;"></i></a>
                 <div class="dropdown-content profile-dropdown" id="profileSidebar">
@@ -27,12 +27,99 @@
         </nav>
     </header>
 
-    <main class="container">
-        <!-- ============================================== -->
-        <!-- ส่วนนี้คือพื้นที่สำหรับใส่เนื้อหาของหน้าใหม่ (Content) -->
-        <!-- ============================================== -->
-        
-        <!-- ============================================== -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-overlay">
+                <div class="hero-content">
+
+                    <h1>สาขาวิชา</h1>
+                    <p>คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี มี 7 สาขาวิชาที่หลากหลาย<br>เพื่อตอบสนองความต้องการของอุตสาหกรรมและเทคโนโลยีสมัยใหม่</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Majors Grid -->
+        <div class="container">
+            <div class="majors-grid">
+                <!-- Major 1 -->
+                <div class="major-card">
+                    <div class="card-image">
+                        <img src="../Photo/MTE.png" alt="สาขาวิชาครุศาสตร์เครื่องกล">
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>สาขาวิชาครุศาสตร์เครื่องกล</span>
+                    </div>
+                </div>
+
+                <!-- Major 2 -->
+                <div class="major-card">
+                    <div class="card-image">
+                        <img src="../Photo/CTE.png" alt="สาขาวิชาครุศาสตร์โยธา">
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>สาขาวิชาครุศาสตร์โยธา</span>
+                    </div>
+                </div>
+
+                <!-- Major 3 -->
+                <div class="major-card">
+                    <div class="card-image">
+                        <img src="../Photo/ETE.png" alt="สาขาวิชาครุศาสตร์ไฟฟ้า">
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>สาขาวิชาครุศาสตร์ไฟฟ้า</span>
+                    </div>
+                </div>
+
+                <!-- Major 4 -->
+                <div class="major-card">
+                    <div class="card-image">
+                        <img src="../Photo/PTE.png" alt="สาขาวิชาครุศาสตร์อุตสาหกรรม">
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>สาขาวิชาครุศาสตร์อุตสาหกรรม</span>
+                    </div>
+                </div>
+
+                <!-- Major 5 -->
+                <div class="major-card">
+                    <div class="card-image">
+                        <img src="../Photo/ECT.png" alt="สาขาวิชาเทคโนโลยีการศึกษาและสื่อสารมวลชน">
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>สาขาวิชาเทคโนโลยีการศึกษาและสื่อสารมวลชน</span>
+                    </div>
+                </div>
+
+                <!-- Major 6 -->
+                <div class="major-card">
+                    <div class="card-image">
+                        <img src="../Photo/PPT.png" alt="สาขาวิชาเทคโนโลยีการพิมพ์และบรรจุภัณฑ์">
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>สาขาวิชาเทคโนโลยีการพิมพ์และบรรจุภัณฑ์</span>
+                    </div>
+                </div>
+
+                <!-- Major 7 -->
+                <div class="major-card centered">
+                    <div class="card-image">
+                        <img src="../Photo/cmm.png" alt="สาขาวิชาวิทยาการคอมพิวเตอร์ประยุกต์-มัลติมีเดีย">
+                    </div>
+                    <div class="card-footer">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>สาขาวิชาวิทยาการคอมพิวเตอร์ประยุกต์-มัลติมีเดีย</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Footer -->
@@ -60,3 +147,4 @@
     <script src="/Js/script.js"></script>
 </body>
 </html>
+
