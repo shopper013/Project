@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/ex_page.css">
+    <link rel="stylesheet" href="../css/Activity.css">
     <title>Activity MOD FIET</title>
 </head>
 <body>
@@ -28,11 +28,96 @@
     </header>
 
     <main class="container">
-        <!-- ============================================== -->
-        <!-- ส่วนนี้คือพื้นที่สำหรับใส่เนื้อหาของหน้าใหม่ (Content) -->
-        <!-- ============================================== -->
-        
-        <!-- ============================================== -->
+        <!-- Activity Section -->
+        <section class="activity-section">
+            <h1 class="section-title">กิจกรรมที่เปิดรับสมัคร</h1>
+            
+            <!-- Search and Filter Bar -->
+            <div class="search-filter-bar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" placeholder="ค้นหาชื่อกิจกรรม" class="search-input">
+                </div>
+                <div class="filter-dropdown">
+                    <select class="filter-select">
+                        <option>ภาควิชาทั้งหมด</option>
+                        <option>ครุศาสตร์เครื่องกล</option>
+                        <option>ครุศาสตร์โยธา</option>
+                        <option>ครุศาสตร์ไฟฟ้า</option>
+                        <option>ครุศาสตร์อุตสาหกรรม</option>
+                        <option>เทคโนโลยีการศึกษาและสื่อสารมวลชน</option>
+                        <option>เทคโนโลยีการพิมพ์
+และบรรจุภัณฑ์</option>
+                        <option>วิทยาการคอมพิวเตอร์ประยุกต์-มัลติมีเดีย</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Activity Cards Container -->
+            <div class="activity-cards">
+                <!-- Card 1: FIET Series Workshop 2 -->
+                <div class="activity-card">
+                    <div class="card-image">
+                        <img src="../Photo/seriesworkshop2.png" alt="FIET SERIES WORKSHOP SEASON 2">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">รายละเอียดกิจกรรม FIET SERIES WORKSHOP SEASON 2<br><span class="subtitle">(ศึกษาต่อพิเศษ ออนไลน์บีช่องทาง)</span></h3>
+                        <p class="card-description">
+                            เบิกโลกได้ให้บ้อง ป.ป.สนนต และ ปวช. ได้ลองสอบที่จริงรับรองจำเริ่ม 
+                            เพื่อศึกษาคำศาสนแบบสายธรรมอิสลามเน็น
+                        </p>
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <span class="detail-label">จัดในวันที่:</span>
+                                <span class="detail-value">เดือนเมษายนถึง กรกฎาคม 2568 - พฤษภาคม 2569</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">สถานที่:</span>
+                                <span class="detail-value">คณะศรุศาสตร์อุตสาหกรรมและเทคโนโลยี (อาคาร 513) นจธ.</span>
+                            </div>
+                            <div class="card-footer">
+                                <div class="participants">
+                                    <i class="fa-solid fa-users"></i>
+                                    <span>100 คน</span>
+                                </div>
+                                <a href="SeriesWorkshop2.html" class="register-btn">สมัคร</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: FIET LAND -->
+                <div class="activity-card">
+                    <div class="card-image">
+                        <img src="../Photo/fiteland.png" alt="FIET LAND">
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">รายละเอียดกิจกรรม กิจกรรม FIET LAND<br><span class="subtitle">(บันเทิงฯทั่วไป)</span></h3>
+                        <p class="card-description">
+                            กิจกรรมเปิดมานแจกจ่ายสิ่งดีความสุขสถานกรรมและเทคโนโลยี เสิ้มการเยี่ยมชุมชนปรามารถระดับวิทยาศาสตร์ เทคโนโลยี 
+                            และวิทยาศาสตร์การศึกษา เพื่อมนุษยศาสตร์ทั่วไปใหม่
+                        </p>
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <span class="detail-label">จัดในวันที่:</span>
+                                <span class="detail-value">วันที่ 10 - 12 ตุลาคม 2568</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">สถานที่:</span>
+                                <span class="detail-value">คณะศรุศาสตร์อุตสาหกรรมและเทคโนโลยี (อาคาร 513) นจธ.</span>
+                            </div>
+                            <div class="card-footer">
+                                <div class="participants">
+                                    <i class="fa-solid fa-users"></i>
+                                    <span>150 คน</span>
+                                </div>
+                                <button class="register-btn">สมัคร</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
