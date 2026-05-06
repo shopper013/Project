@@ -243,6 +243,71 @@ const majorData = {
     }
 };
 
+function openActivityModal(activityKey) {
+    const data = activityData[activityKey];
+    if (!data) return;
+
+    document.getElementById('activity-modal-banner').src = data.banner;
+    document.getElementById('activity-modal-title').textContent = data.title;
+    document.getElementById('activity-modal-subtitle').textContent = data.subtitle;
+    document.getElementById('activity-modal-workshops').innerHTML = data.workshops;
+
+    const modal = document.getElementById('activity-modal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeActivityModal() {
+    const modal = document.getElementById('activity-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'activity-modal') {
+        e.target.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
+
+// ===============================================================
+//                           SIDEBAR SLIDING INDICATOR
+// ===============================================================
+document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.querySelector('.sidebar-menu');
+    const indicator = document.querySelector('.active-indicator');
+    if (!sidebar || !indicator) return;
+
+    const activeItem = sidebar.querySelector('li.active');
+
+    function moveIndicator(element) {
+        if (!element) return;
+        const top = element.offsetTop;
+        const height = element.offsetHeight;
+        indicator.style.display = 'block';
+        indicator.style.height = `${height}px`;
+        indicator.style.transform = `translateY(${top}px)`;
+    }
+
+    moveIndicator(activeItem);
+
+    const menuItems = sidebar.querySelectorAll('li:not(.divider)');
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            menuItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            moveIndicator(this);
+        });
+    });
+});
+
+// ===============================================================
+//                           MAJOR MODAL
+// ===============================================================
 function openMajorModal(majorKey) {
     const data = majorData[majorKey];
     if (!data) return;
@@ -349,104 +414,126 @@ const activityData = {
         `
     }
 };
+// ===============================================================
+//                    ADMIN BUILD ACTIVITY PAGE
+// ===============================================================
+if (document.getElementById('majorDropdown')) {
 
-function openActivityModal(activityKey) {
-    const data = activityData[activityKey];
-    if (!data) return;
+/* ── Tab switching ── */
+function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+}
 
-    document.getElementById('activity-modal-banner').src = data.banner;
-    document.getElementById('activity-modal-title').textContent = data.title;
-    document.getElementById('activity-modal-subtitle').textContent = data.subtitle;
-    document.getElementById('activity-modal-workshops').innerHTML = data.workshops;
+/* ── Checklist Dropdown toggle ── */
+function toggleChecklist() {
+    const trigger = document.getElementById('majorTrigger');
+    const panel   = document.getElementById('majorPanel');
+    const isOpen  = panel.classList.contains('open');
+    panel.classList.toggle('open', !isOpen);
+    trigger.classList.toggle('open', !isOpen);
+}
 
-    const modal = document.getElementById('activity-modal');
-    if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+/* ── Update trigger label + re-render section cards ── */
+function updateMajors() {
+    const checks = document.querySelectorAll('#majorPanel input[type="checkbox"]:checked');
+    const names  = Array.from(checks).map(c => c.value);
+
+    const triggerText = document.getElementById('majorTriggerText');
+    triggerText.textContent = names.length === 0
+        ? '-- เลือกสาขาวิชา --'
+        : `เลือกแล้ว ${names.length} สาขา`;
+
+    renderMajorSections(names);
+}
+
+/* ── Render one form-card per selected major ── */
+function renderMajorSections(names) {
+    const container = document.getElementById('majorSectionsContainer');
+    container.innerHTML = '';
+
+    names.forEach((majorName, idx) => {
+        const uid  = 'major_' + idx;
+        const card = document.createElement('div');
+        card.className = 'form-card';
+        card.setAttribute('data-major', majorName);
+        card.innerHTML = `
+            <div class="form-card-title">ข้อมูลกิจกรรม ${majorName}</div>
+
+            <div class="field-row full mb-16">
+                <div class="field-group">
+                    <label>ชื่อกิจกรรม <span class="req">*</span></label>
+                    <input type="text" name="name_${uid}" placeholder="ชื่อกิจกรรมสำหรับ ${majorName}">
+                </div>
+            </div>
+            <div class="field-row three mb-16">
+                <div class="field-group">
+                    <label>จำนวนที่รับสูงสุด <span class="req">*</span></label>
+                    <input type="number" name="quota_${uid}" placeholder="เช่น 100" min="1">
+                </div>
+                <div class="field-group">
+                    <label>วันที่เริ่ม <span class="req">*</span></label>
+                    <input type="date" name="start_${uid}">
+                </div>
+                <div class="field-group">
+                    <label>วันที่สิ้นสุด <span class="req">*</span></label>
+                    <input type="date" name="end_${uid}">
+                </div>
+            </div>
+            <div class="field-row full mb-16">
+                <div class="field-group">
+                    <label>สถานที่ <span class="req">*</span></label>
+                    <input type="text" name="place_${uid}" placeholder="เช่น ตึก S13 ห้อง 301">
+                </div>
+            </div>
+            <div class="field-row full mb-16">
+                <div class="field-group">
+                    <label>อาจารย์ผู้รับผิดชอบ <span class="req">*</span></label>
+                    <input type="text" name="teacher_${uid}" placeholder="ชื่ออาจารย์ผู้รับผิดชอบ">
+                </div>
+            </div>
+            <div class="field-row full mb-16">
+                <div class="field-group">
+                    <label>รายละเอียดกิจกรรม</label>
+                    <textarea name="desc_${uid}" placeholder="อธิบายรายละเอียดกิจกรรม (ไม่บังคับ)" style="min-height:80px;"></textarea>
+                </div>
+            </div>
+            <div class="field-row full">
+                <div class="field-group">
+                    <label>รูปภาพกิจกรรม <span class="req">*</span></label>
+                    <label class="upload-box" for="img_${uid}">
+                        <input type="file" id="img_${uid}" accept="image/*" onchange="previewImage(this)">
+                        <i class='bx bx-image-add'></i>
+                        <p>คลิกเพื่ออัปโหลดรูปภาพ</p>
+                        <span>PNG, JPG, WEBP สูงสุด 5MB</span>
+                    </label>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+/* ── Image preview for dynamic upload boxes ── */
+function previewImage(input) {
+    const box = input.closest('.upload-box');
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            box.innerHTML = `<img src="${e.target.result}" style="max-height:160px; border-radius:8px; object-fit:cover; width:100%;">`;
+        };
+        reader.readAsDataURL(input.files[0]);
     }
 }
 
-function closeActivityModal() {
-    const modal = document.getElementById('activity-modal');
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
-
+/* ── Close checklist panel when clicking outside ── */
 document.addEventListener('click', function(e) {
-    if (e.target.id === 'activity-modal') {
-        e.target.classList.remove('active');
-        document.body.style.overflow = '';
+    const dropdown = document.getElementById('majorDropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+        document.getElementById('majorPanel').classList.remove('open');
+        document.getElementById('majorTrigger').classList.remove('open');
     }
 });
-
-// ===============================================================
-//                           ADMIN SIDEBAR TOGGLE
-// ===============================================================
-
-const menuToggle = document.querySelector('.menu-toggle');
-const adminSidebar = document.querySelector('.admin-sidebar');
-
-if (menuToggle && adminSidebar) {
-    menuToggle.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-            // Mobile: Slide in/out
-            adminSidebar.classList.toggle('active');
-        } else {
-            // Desktop: Collapse/Expand
-            adminSidebar.classList.toggle('collapsed');
-        }
-    });
-
-    // Close sidebar on mobile when clicking outside
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768) {
-            if (!adminSidebar.contains(e.target) && !menuToggle.contains(e.target)) {
-                adminSidebar.classList.remove('active');
-            }
-        }
-    });
-}
-
-// ===============================================================
-//                           SMOOTH PAGE TRANSITIONS
-// ===============================================================
-
-const transitionLinks = document.querySelectorAll('.sidebar-menu a, .quick-cards a');
-const adminContent = document.querySelector('.admin-content');
-
-if (transitionLinks.length > 0 && adminContent) {
-    transitionLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const targetUrl = this.getAttribute('href');
-            
-            // Proceed only if it's an internal HTML link and not a "#" link
-            if (targetUrl && targetUrl !== '#' && targetUrl.endsWith('.html')) {
-                // Add fade-out animation
-                adminContent.classList.add('fade-out');
-                
-                // Move active class immediately to show visual feedback
-                const parentLi = this.parentElement;
-                if (parentLi && parentLi.tagName === 'LI') {
-                    document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
-                    parentLi.classList.add('active');
-                    
-                    // Move the indicator
-                    if (typeof moveSidebarIndicator === 'function') {
-                        moveSidebarIndicator(parentLi);
-                    }
-                }
-                
-                // Wait for animation to finish before navigating
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 250); // Matches CSS transition duration slightly less
-            }
-        });
-    });
-}
-
-// ===============================================================
-//                           SIDEBAR SLIDING INDICATOR
-// ===============================================================
+} // end AdminBuild guard
