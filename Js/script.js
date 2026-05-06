@@ -145,20 +145,46 @@ if (profileMenuBtn && profileSidebar) {
 
 const majorData = {
     mte: {
-        logo: "../Photo/MTE.png", // ใส่โลโก้จริงๆ ถ้ายมี
+        logo: "../Photo/Logo_MTE.png", 
         title: "สาขาวิชาครุศาสตร์เครื่องกล",
         subtitle: "Mechanical Technology Education",
-        images: ["../Photo/MTE.png", "../Photo/MTE.png", "../Photo/MTE.png"],
-        description: "รอข้อมูลสาขาวิชา...",
-        curriculum: `<div class="course-group"><span class="course-title">● รอข้อมูลหลักสูตร</span></div>`
+        images: ["../Photo/MTE3.jpg", "../Photo/MTE2.jpg", "../Photo/MTE4.jpg"],
+        description: "หลักสูตรครุศาสตร์อุตสาหกรรมบัณฑิต สาขาวิชาวิศวกรรมเครื่องกล เป็นหลักสูตรที่จัดให้ผู้เรียนมีองค์ความรู้ ทักษะ ทัศนคติ โดยเฉพาะจิตสำ นึกของความเป็นครูช่างด้วยการผสผสานศาสตร์ทางวิชาชีพ การสอนและศาสตร์ทางวิชาชีพวิศวกรรมควบคู่กันไปโดยจัดให้ผู้เรียน เรียนรายวิชพื้นฐานทางวิทยาศาสตร์และรายวิชาทางเทคโนโลยี และถูกบ่มเพาะอย่างเพียงพอเพื่อให้มีคุณธรรม และจริยธรรมในวิชานั้น ผู้เรียนมีความสามารถในการถ่ายทอดและปฏิบัติการสอนวิชาชีพทางวิศวกรรมและเป็นวิทยากรฝึกอบรมใน สถานประกอบการ ด้วยการเลือกใช้กรรมวิธีการสอน/การถ่ายทอด/การฝึกอบรมในสถานศึกษาหรือในโรงงานอุตสาหกรรมได้อย่างเหมาะสม สามารถถ่ายทอดแนวความคิดที่ก่อให้เกิดความสามารถสร้างสรรค์ สามารถคิดเชิงออกแบบ ผลิต พัฒนา และเลือกใช้สื่อการสอนได้อย่างมีประสิทธิภาพแสวงหาเทคโนโลยี สมัยใหม่ซึ่งเชื่อมโยงกับสื่อการสอนต่าง ๆ ตลอดจนการวัดและประเมินผลการสอน/การถ่ายทอด/การฝึกอบรมได้อย่างเป็นระบบรอข้อมูลสาขาวิชา...",
+        curriculum: `
+            <div class="course-group">
+                <span class="course-title">● ปริญญาตรี เทคโนโลยีบัณฑิต (ทล.บ.) 4 ปี</span>
+                <ul>
+                    <li><i class="fa-solid fa-graduation-cap"></i> สาขาเทคโนโลยีเครื่องกล</li>
+                </ul>
+            </div>
+            <div class="course-group">
+                <span class="course-title">● ปริญญาตรี ครุศาสตร์อุตสาหกรรมบัณฑิต (ค.อ.บ.) 5 ปี</span>
+                <ul>
+                    <li><i class="fa-solid fa-graduation-cap"></i> สาขาครุศาสตร์เครื่องกล</li>
+                </ul>
+            </div>
+            `
     },
     cte: {
-        logo: "../Photo/CTE.png",
+        logo: "../Photo/Logo_CTE.png",
         title: "สาขาวิชาครุศาสตร์โยธา",
         subtitle: "Civil Technology Education",
         images: ["../Photo/CTE.png", "../Photo/CTE.png", "../Photo/CTE.png"],
-        description: "รอข้อมูลสาขาวิชา...",
-        curriculum: `<div class="course-group"><span class="course-title">● รอข้อมูลหลักสูตร</span></div>`
+        description: "ทรัพยากรบุคคลที่สำเร็จจากหลักสูตรนี้จะเป็นผู้ที่มีความรู้ความสามารถทางด้านการสอน การถ่ายทอดความรู้ มีทักษะการปฏิบัติงานช่างโยธา และมีความรู้ทางวิศวกรรมโยธา สามารถนำความรู้ไปประยุกต์ใช้กับการประกอบวิชาชีพครู สาขาวิศวกรรมโยธาได้ มีทัศนคติและมีจิตสำนึกที่ดีของความเป็นครูช่าง สามารถที่จะถ่ายทอดความรู้ทั้งภาคทฤษฎีและภาคปฏิบัติให้กับผู้เรียนได้อย่างเป็นระบบ มีความสามารถที่จะค้นคว้าหาความรู้เพิ่มเติมและพัฒนางานวิจัยทางเทคโนโลยีโยธา สามารถที่จะปรับตัวเข้ากับสังคมและสถานการณ์ทั้งปัจจุบันและอนาคตได้",
+        curriculum: `
+            <div class="course-group">  
+                <span class="course-title">● ปริญญาตรี เทคโนโลยีบัณฑิต (ทล.บ.) 4 ปี</span>
+                <ul>
+                    <li><i class="fa-solid fa-graduation-cap"></i> สาขาเทคโนโลยีโยธา</li>
+                </ul>
+            </div>
+            <div class="course-group">
+                <span class="course-title">● ปริญญาตรี ครุศาสตร์อุตสาหกรรมบัณฑิต (ค.อ.บ.) 5 ปี</span>
+                <ul>
+                    <li><i class="fa-solid fa-graduation-cap"></i> สาขาครุศาสตร์โยธา</li>
+                </ul>
+            </div>
+            `
     },
     ete: {
         logo: "../Photo/logo_ETE.png",
@@ -184,7 +210,7 @@ const majorData = {
         `
     },
     pte: {
-        logo: "../Photo/PTE.png",
+        logo: "../Photo/Logo_PTE.png",
         title: "สาขาวิชาครุศาสตร์อุตสาหกรรม",
         subtitle: "Production Technology Education",
         images: ["../Photo/PTE.png", "../Photo/PTE.png", "../Photo/PTE.png"],
@@ -200,7 +226,7 @@ const majorData = {
         curriculum: `<div class="course-group"><span class="course-title">● รอข้อมูลหลักสูตร</span></div>`
     },
     ppt: {
-        logo: "../Photo/PPT.png",
+        logo: "../Photo/Logo_PPT.png",
         title: "สาขาวิชาเทคโนโลยีการพิมพ์และบรรจุภัณฑ์",
         subtitle: "Printing and Packaging Technology",
         images: ["../Photo/PPT.png", "../Photo/PPT.png", "../Photo/PPT.png"],
@@ -208,7 +234,7 @@ const majorData = {
         curriculum: `<div class="course-group"><span class="course-title">● รอข้อมูลหลักสูตร</span></div>`
     },
     cmm: {
-        logo: "../Photo/cmm.png",
+        logo: "../Photo/Logo_CMM.png",
         title: "สาขาวิชาวิทยาการคอมพิวเตอร์ประยุกต์-มัลติมีเดีย",
         subtitle: "Computer and Multimedia",
         images: ["../Photo/cmm.png", "../Photo/cmm.png", "../Photo/cmm.png"],
