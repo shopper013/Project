@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/Major.css">
+    <link rel="stylesheet" href="../css/Box.css">
     <title>Activity MOD FIET</title>
 </head>
 <body>
@@ -43,7 +44,7 @@
         <div class="container">
             <div class="majors-grid">
                 <!-- Major 1 -->
-                <div class="major-card">
+                <div class="major-card" onclick="openMajorModal('mte')">
                     <div class="card-image">
                         <img src="../Photo/MTE.png" alt="สาขาวิชาครุศาสตร์เครื่องกล">
                     </div>
@@ -54,7 +55,7 @@
                 </div>
 
                 <!-- Major 2 -->
-                <div class="major-card">
+                <div class="major-card" onclick="openMajorModal('cte')">
                     <div class="card-image">
                         <img src="../Photo/CTE.png" alt="สาขาวิชาครุศาสตร์โยธา">
                     </div>
@@ -65,7 +66,7 @@
                 </div>
 
                 <!-- Major 3 -->
-                <div class="major-card">
+                <div class="major-card" onclick="openMajorModal('ete')">
                     <div class="card-image">
                         <img src="../Photo/ETE.png" alt="สาขาวิชาครุศาสตร์ไฟฟ้า">
                     </div>
@@ -76,7 +77,7 @@
                 </div>
 
                 <!-- Major 4 -->
-                <div class="major-card">
+                <div class="major-card" onclick="openMajorModal('pte')">
                     <div class="card-image">
                         <img src="../Photo/PTE.png" alt="สาขาวิชาครุศาสตร์อุตสาหกรรม">
                     </div>
@@ -87,7 +88,7 @@
                 </div>
 
                 <!-- Major 5 -->
-                <div class="major-card">
+                <div class="major-card" onclick="openMajorModal('ect')">
                     <div class="card-image">
                         <img src="../Photo/ECT.png" alt="สาขาวิชาเทคโนโลยีการศึกษาและสื่อสารมวลชน">
                     </div>
@@ -98,7 +99,7 @@
                 </div>
 
                 <!-- Major 6 -->
-                <div class="major-card">
+                <div class="major-card" onclick="openMajorModal('ppt')">
                     <div class="card-image">
                         <img src="../Photo/PPT.png" alt="สาขาวิชาเทคโนโลยีการพิมพ์และบรรจุภัณฑ์">
                     </div>
@@ -109,7 +110,7 @@
                 </div>
 
                 <!-- Major 7 -->
-                <div class="major-card centered">
+                <div class="major-card centered" onclick="openMajorModal('cmm')">
                     <div class="card-image">
                         <img src="../Photo/cmm.png" alt="สาขาวิชาวิทยาการคอมพิวเตอร์ประยุกต์-มัลติมีเดีย">
                     </div>
@@ -120,6 +121,56 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Template -->
+        <div class="modal-overlay" id="major-modal">
+            <div class="modal-container">
+                <!-- ส่วนหัว Modal -->
+                <div class="modal-header">
+                    <div class="header-left">
+                        <img src="" alt="Logo" class="dept-logo" id="modal-logo">
+                        <div class="title-group">
+                            <h1 id="modal-title">ชื่อสาขา</h1>
+                            <p id="modal-subtitle">ชื่อภาษาอังกฤษ</p>
+                        </div>
+                    </div>
+                    <a href="javascript:void(0)" class="close-btn" onclick="closeMajorModal()">&times;</a>
+                </div>
+
+                <!-- ส่วนเนื้อหา Modal -->
+                <div class="modal-body">
+                    <!-- รูปภาพ 3 รูป -->
+                    <div class="image-gallery">
+                        <div class="gallery-item"><img src="" id="modal-img-1" alt="Image 1"></div>
+                        <div class="gallery-item"><img src="" id="modal-img-2" alt="Image 2"></div>
+                        <div class="gallery-item"><img src="" id="modal-img-3" alt="Image 3"></div>
+                    </div>
+
+                    <!-- ส่วนเกี่ยวกับสาขา -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <i class="fa-solid fa-gear gear-icon"></i>
+                            <h2>เกี่ยวกับสาขา</h2>
+                        </div>
+                        <p class="description" id="modal-description">
+                            ข้อมูลรายละเอียดสาขา...
+                        </p>
+                    </div>
+
+                    <!-- ส่วนหลักสูตร -->
+                    <div class="curriculum-box">
+                        <div class="section-header">
+                            <i class="fa-solid fa-book-open book-icon"></i>
+                            <h2>หลักสูตรที่เปิดสอน (ปริญญาตรี)</h2>
+                        </div>
+                        <div class="curriculum-details" id="modal-curriculum">
+                            <!-- JS จะใส่ข้อมูลหลักสูตรที่นี่ -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Footer -->
