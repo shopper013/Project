@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/Activity.css">
+    <link rel="stylesheet" href="../css/Box.css">
+    <link rel="stylesheet" href="../css/SeriesWorkshop2.css">
     <title>Activity MOD FIET</title>
 </head>
 
@@ -86,7 +88,7 @@
                                     <i class="fa-solid fa-users"></i>
                                     <span>100 คน</span>
                                 </div>
-                                <a href="SeriesWorkshop2.html" class="register-btn">สมัคร</a>
+                                <a href="javascript:void(0)" class="register-btn" onclick="openActivityModal('workshop2')">สมัคร</a>
                             </div>
                         </div>
                     </div>
@@ -119,13 +121,45 @@
                                     <i class="fa-solid fa-users"></i>
                                     <span>150 คน</span>
                                 </div>
-                                <button class="register-btn">สมัคร</button>
+                                <button class="register-btn" onclick="openActivityModal('fietland')">สมัคร</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Activity Modal Template -->
+        <div class="modal-overlay" id="activity-modal">
+            <div class="modal-container" style="max-width: 900px;">
+                <!-- ส่วนหัว Modal -->
+                <div class="modal-header">
+                    <div class="header-left">
+                        <div class="title-group">
+                            <h1 id="activity-modal-title" style="margin: 0; font-size: 1.5rem;">ชื่อกิจกรรม</h1>
+                            <p id="activity-modal-subtitle" style="margin: 0; color: #666;">รายละเอียด</p>
+                        </div>
+                    </div>
+                    <a href="javascript:void(0)" class="close-btn" onclick="closeActivityModal()">&times;</a>
+                </div>
+
+                <!-- ส่วนเนื้อหา Modal -->
+                <div class="modal-body" style="padding: 0; background-color: #f8f9fa;">
+                    <!-- Banner -->
+                    <div class="banner-section" style="margin: 0;">
+                        <img src="" id="activity-modal-banner" alt="Banner" style="width: 100%; display: block;">
+                    </div>
+                    
+                    <section class="workshop-section" style="padding: 40px 20px;">
+                        <!-- Workshop Cards Grid -->
+                        <div class="workshop-cards" id="activity-modal-workshops">
+                            <!-- JS จะใส่ข้อมูลการ์ดที่นี่ -->
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- Footer -->
