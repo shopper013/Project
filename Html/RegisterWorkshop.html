@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="../css/SeriesWorkshop2.css">
     <link rel="stylesheet" href="../css/RegisterWorkshop.css">
     <title>FIET Register Workshop</title>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -95,11 +97,13 @@
                 <div class="form-group span-edu">
                     <label>ระดับชั้นการศึกษา</label>
                     <select>
-                        <option value="มัธยมศึกษาปีที่ 6">มัธยมศึกษาปีที่ 6</option>
-                        <option value="มัธยมศึกษาปีที่ 5">มัธยมศึกษาปีที่ 5</option>
                         <option value="มัธยมศึกษาปีที่ 4">มัธยมศึกษาปีที่ 4</option>
-                        <option value="ปวช.">ปวช.</option>
-                        <option value="ปวส.">ปวส.</option>
+                        <option value="มัธยมศึกษาปีที่ 5">มัธยมศึกษาปีที่ 5</option>
+                        <option value="มัธยมศึกษาปีที่ 6">มัธยมศึกษาปีที่ 6</option>
+                        <option value="ปวช.">ปวช.1</option>
+                        <option value="ปวช.">ปวช.2</option>
+                        <option value="ปวช.">ปวช.3</option>
+                        <option value="อื่นๆ">อื่น ๆ </option>
                     </select>
                 </div>
 
@@ -116,25 +120,25 @@
                 <!-- Row 3 -->
                 <div class="form-group span-half">
                     <label>อีเมล <span class="required">*</span></label>
-                    <input type="email" placeholder="david@gmail.com" required>
+                    <input type="email" placeholder="david@gmail.com" pattern=".*@gmail\.com$" title="กรุณากรอกอีเมล @gmail.com เท่านั้น" required>
                 </div>
                 <div class="form-group span-half">
                     <label>เบอร์โทรที่ติดต่อได้ <span class="required">*</span></label>
-                    <input type="tel" placeholder="099-9999999" required>
+                    <input type="tel" placeholder="0999999999" pattern="[0-9]{10}" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);" title="กรุณากรอกเบอร์โทรศัพท์เป็นตัวเลข 10 หลัก" required>
                 </div>
             </div>
 
             <hr class="form-divider">
 
             <div class="form-group full-width">
-                <label>สนใจเข้าศึกษาต่อในหลักสูตรใด <span class="required">*</span></label> 
+                <label>สนใจเข้าศึกษาต่อในหลักสูตรใด <span class="required">*</span></label>
                 <select required>
                     <option value="" disabled selected hidden>กรุณาเลือกหลักสูตร</option>
                     <option>ครุศาสตร์เครื่องกล</option>
                     <option>ครุศาสตร์โยธา</option>
                     <option>ครุศาสตรไฟฟ้า - ไฟฟ้ากำลัง</option>
                     <option>ครุศาสตรไฟฟ้า - คอมพิวเตอร์</option>
-                    <option>ครุศาสตรไฟฟ้า - อิเล็กทรอนิกส์</option>
+                    <option>ครุศาสตรไฟฟ้า - อิเล็กทรอนิกส์ระบบอัจฉริยะ</option>
                     <option>ครุศาสตร์อุตสาหกรรม</option>
                     <option>เทคโนโลยีการศึกษาและสื่อสารมวลชน</option>
                     <option>เทคโนโลยีการพิมพ์และบรรจุภัณฑ์</option>
@@ -146,10 +150,16 @@
                 <label>รู้จักงาน FIET Series Workshop ผ่านช่องทางไหน <span class="required">*</span></label>
                 <select required>
                     <option value="" disabled selected hidden>กรุณาเลือกช่องทาง</option>
-                    <option value="facebook">Page Facebook : คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="tiktok">TikTok</option>
+                    <option value="facebook">Page Facebook :  คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี</option>
+                    <option value="facebook">Page Facebook :  FITE Admission</option>
+                    <option value="instagram">Instagram : คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี มจธ.</option>
+                    <option value="tiktok">TikTok : fiet.kmutt</option>
+                    <option value="website">Website : Dek-D</option>
+                    <option value="Parents">ผู้ปกครอง</option>
+                    <option value="teacher">คุณครูที่โรงเรียน</option>
                     <option value="friend">เพื่อน / คนรู้จัก</option>
+                    <option value="Senior">รุ่นพี่ที่กำลังศึกษาอยู่ที่คณะครุศาสตร์อุตสาหกรรมและเทคโนโลยี มจธ.</option>
+                    <option value="other">อื่น ๆ</option>
                 </select>
             </div>
 
@@ -187,9 +197,20 @@
     <script>
         function handleRegistration(event) {
             event.preventDefault(); // Prevent page reload on form submit
-            alert("ยืนยันการสมัคร");
-            // You can add logic here to redirect or clear form after submission if needed
-            // window.location.href = "SeriesWorkshop2.html";
+            
+            Swal.fire({
+                title: 'ยืนยันการสมัคร',
+                text: 'ระบบได้รับข้อมูลการสมัครของคุณเรียบร้อยแล้ว',
+                icon: 'success',
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: '#f59e0b',
+                allowOutsideClick: false 
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect back to the workshop page
+                    window.location.href = "SeriesWorkshop2.html";
+                }
+            });
         }
     </script>
 </body>

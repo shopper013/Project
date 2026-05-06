@@ -376,7 +376,7 @@ const activityData = {
                             <span>คณะศรุศาสตร์อุตสาหกรรมและเทคโนโลยี S13 ชั้น 3</span>
                         </div>
                     </div>
-                    <button class="register-btn-workshop" onclick="">สมัคร</button>
+                    <button class="register-btn-workshop" onclick="window.location.href='RegisterWorkshop.html'">สมัคร</button>
                 </div>
             </div>
 
@@ -398,7 +398,7 @@ const activityData = {
                             <span>คณะศรุศาสตร์อุตสาหกรรมและเทคโนโลยี S13 ชั้น 4</span>
                         </div>
                     </div>
-                    <button class="register-btn-workshop" onclick="">สมัคร</button>
+                    <button class="register-btn-workshop" onclick="window.location.href='RegisterWorkshop.html'">สมัคร</button>
                 </div>
             </div>
         `

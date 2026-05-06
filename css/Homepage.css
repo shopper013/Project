@@ -33,7 +33,7 @@ body {
 .navbar .nav-links {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 30px; /* Increased from 30px for more spacing */
 }
 
 .navbar .nav-links a {
@@ -42,7 +42,7 @@ body {
     font-size: 1rem;
     font-weight: 500;
     opacity: 0.8;
-    padding: 6px 14px;
+    padding: 8px 20px; /* Increased padding */
     border-radius: 8px;
     transition: background-color 0.3s, opacity 0.3s;
 }
@@ -87,7 +87,7 @@ body {
     font-size: 1.15rem !important;
     opacity: 1 !important;
     transition: background-color 0.2s, color 0.2s;
-    border-bottom: 2px solid #e0e0e0; /* Border between items */
+    margin-bottom: 10px; /* Small vertical spacing between items */
 }
 
 /* Hover over links */
@@ -124,6 +124,16 @@ body {
 
 .logout-link i {
     color: #888;
+}
+
+.activity-mgmt-link {
+    background-color: #e3f2fd; /* Light blue */
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+}
+
+.activity-mgmt-link i {
+    color: #4DA7DB;
 }
 
 .profile-dropdown-container {
