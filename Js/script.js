@@ -285,7 +285,7 @@ const activityData = {
                             <span>คณะศรุศาสตร์อุตสาหกรรมและเทคโนโลยี S13 ชั้น 3</span>
                         </div>
                     </div>
-                    <button class="register-btn-workshop" onclick="window.location.href='RegisterWorkshop.html'">สมัคร</button>
+                    <button class="register-btn-workshop" onclick="">สมัคร</button>
                 </div>
             </div>
 
@@ -307,7 +307,7 @@ const activityData = {
                             <span>คณะศรุศาสตร์อุตสาหกรรมและเทคโนโลยี S13 ชั้น 4</span>
                         </div>
                     </div>
-                    <button class="register-btn-workshop" onclick="window.location.href='RegisterWorkshop.html'">สมัคร</button>
+                    <button class="register-btn-workshop" onclick="">สมัคร</button>
                 </div>
             </div>
         `
@@ -354,3 +354,73 @@ document.addEventListener('click', function(e) {
         document.body.style.overflow = '';
     }
 });
+
+// ===============================================================
+//                           ADMIN SIDEBAR TOGGLE
+// ===============================================================
+
+const menuToggle = document.querySelector('.menu-toggle');
+const adminSidebar = document.querySelector('.admin-sidebar');
+
+if (menuToggle && adminSidebar) {
+    menuToggle.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            // Mobile: Slide in/out
+            adminSidebar.classList.toggle('active');
+        } else {
+            // Desktop: Collapse/Expand
+            adminSidebar.classList.toggle('collapsed');
+        }
+    });
+
+    // Close sidebar on mobile when clicking outside
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+            if (!adminSidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                adminSidebar.classList.remove('active');
+            }
+        }
+    });
+}
+
+// ===============================================================
+//                           SMOOTH PAGE TRANSITIONS
+// ===============================================================
+
+const transitionLinks = document.querySelectorAll('.sidebar-menu a, .quick-cards a');
+const adminContent = document.querySelector('.admin-content');
+
+if (transitionLinks.length > 0 && adminContent) {
+    transitionLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const targetUrl = this.getAttribute('href');
+            
+            // Proceed only if it's an internal HTML link and not a "#" link
+            if (targetUrl && targetUrl !== '#' && targetUrl.endsWith('.html')) {
+                // Add fade-out animation
+                adminContent.classList.add('fade-out');
+                
+                // Move active class immediately to show visual feedback
+                const parentLi = this.parentElement;
+                if (parentLi && parentLi.tagName === 'LI') {
+                    document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
+                    parentLi.classList.add('active');
+                    
+                    // Move the indicator
+                    if (typeof moveSidebarIndicator === 'function') {
+                        moveSidebarIndicator(parentLi);
+                    }
+                }
+                
+                // Wait for animation to finish before navigating
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 250); // Matches CSS transition duration slightly less
+            }
+        });
+    });
+}
+
+// ===============================================================
+//                           SIDEBAR SLIDING INDICATOR
+// ===============================================================
