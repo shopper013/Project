@@ -92,7 +92,7 @@ body {
     font-size: 1.15rem !important;
     opacity: 1 !important;
     transition: background-color 0.2s, color 0.2s;
-    border-bottom: 2px solid #e0e0e0; /* Border between items */
+    margin-bottom: 10px; /* Small vertical spacing between items */
 }
 
 /* Hover over links */
@@ -127,6 +127,16 @@ body {
     color: #888;
 }
 
+.activity-mgmt-link {
+    background-color: #e6f2f7;
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+}
+
+.activity-mgmt-link i {
+    color: #888;
+}
+
 .profile-dropdown-container {
     margin-left: 10px; /* Space between links and icon */
 }
@@ -147,7 +157,6 @@ body {
 .navbar .nav-links .menu-icon {
     font-size: 1.2rem;
     cursor: pointer;
-    margin-left: 10px;
 }
 
 /* ========================================= */
