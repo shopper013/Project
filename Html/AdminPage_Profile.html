@@ -136,10 +136,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>รหัสผ่านใหม่</label>
-                                    <input type="password" id="newPassword" placeholder="กรอกรหัสผ่านใหม่" oninput="checkStrength(this.value)">
-                                    <div class="password-strength">
-                                        <div class="password-strength-bar" id="strengthBar"></div>
-                                    </div>
+                                    <input type="password" id="newPassword" placeholder="กรอกรหัสผ่านใหม่">
                                 </div>
                                 <div class="form-group">
                                     <label>ยืนยันรหัสผ่านใหม่</label>
@@ -152,42 +149,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /Right -->
                 </div>
-                <!-- /Profile Layout -->
-
             </main>
         </div>
     </div>
-
-    <script>
-        // Password strength checker
-        function checkStrength(val) {
-            const bar = document.getElementById('strengthBar');
-            let strength = 0;
-            if (val.length >= 8) strength++;
-            if (/[A-Z]/.test(val)) strength++;
-            if (/[0-9]/.test(val)) strength++;
-            if (/[^A-Za-z0-9]/.test(val)) strength++;
-
-            const colors = ['#d32f2f', '#f0932b', '#fbc02d', '#388e3c'];
-            const widths = ['25%', '50%', '75%', '100%'];
-            if (val.length === 0) {
-                bar.style.width = '0%';
-            } else {
-                bar.style.width = widths[strength - 1] || '25%';
-                bar.style.background = colors[strength - 1] || '#d32f2f';
-            }
-        }
-
-        // Mobile sidebar toggle
-        const menuToggle = document.querySelector('.menu-toggle');
-        const sidebar = document.querySelector('.admin-sidebar');
-        if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-            });
-        }
-    </script>
 </body>
 </html>
