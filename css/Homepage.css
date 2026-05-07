@@ -16,7 +16,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #4DA7DB; /* Blue color from image */
+    background-color: #42B5E1; /* Blue color from image */
     padding: 0 40px;
     height: 60px;
     color: white;
@@ -33,7 +33,7 @@ body {
 .navbar .nav-links {
     display: flex;
     align-items: center;
-    gap: 30px; /* Increased from 30px for more spacing */
+    gap: 30px;
 }
 
 .navbar .nav-links a {
@@ -42,7 +42,7 @@ body {
     font-size: 1rem;
     font-weight: 500;
     opacity: 0.8;
-    padding: 8px 20px; /* Increased padding */
+    padding: 6px 14px;
     border-radius: 8px;
     transition: background-color 0.3s, opacity 0.3s;
 }
@@ -57,6 +57,31 @@ body {
     background-color: rgba(255, 255, 255, 0.4);
 }
 
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-icon {
+    font-size: 2rem;
+    background: white;
+    color: #42B5E1;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.brand-text h1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.brand-text p {
+    font-size: 0.8rem;
+    margin: 0;
+    opacity: 0.9;
+}
 /* Dropdown Container */
 .dropdown {
     /* removed position: relative so child is relative to navbar */
@@ -101,10 +126,7 @@ body {
     display: block;
 }
 
-/* Profile Dropdown Specific Styles */
-.profile-dropdown {
-    /* No specific overrides needed now */
-}
+
 
 .profile-link {
     background-color: #fff3e0; /* Light cream/orange */
@@ -127,13 +149,13 @@ body {
 }
 
 .activity-mgmt-link {
-    background-color: #e3f2fd; /* Light blue */
+    background-color: #e6f2f7;
     padding-top: 25px !important;
     padding-bottom: 25px !important;
 }
 
 .activity-mgmt-link i {
-    color: #4DA7DB;
+    color: #888;
 }
 
 .profile-dropdown-container {
@@ -156,7 +178,6 @@ body {
 .navbar .nav-links .menu-icon {
     font-size: 1.2rem;
     cursor: pointer;
-    margin-left: 10px;
 }
 
 /* Container */
@@ -247,7 +268,7 @@ body {
 }
 
 .card-date i, .card-location i {
-    color: #4DA7DB;
+    color: #42B5E1;
     width: 14px;
 }
 
@@ -282,7 +303,7 @@ body {
 }
 
 .main-news {
-    border-color: #f39c12; /* Orange border for highlight */
+    border-color: #F79228; /* Orange border for highlight */
 }
 
 .news-header-meta {
@@ -300,7 +321,7 @@ body {
 }
 
 .tag-orange {
-    background-color: #f39c12;
+    background-color: #F79228;
     color: white;
 }
 
@@ -345,7 +366,7 @@ body {
 }
 
 .read-more {
-    color: #f39c12;
+    color: #F79228;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
@@ -377,7 +398,7 @@ body {
 .vertical-bar {
     width: 4px;
     height: 20px;
-    background-color: #f39c12;
+    background-color: #F79228;
     border-radius: 2px;
 }
 
@@ -416,7 +437,7 @@ body {
 }
 
 .btn-all-news {
-    background-color: #f39c12;
+    background-color: #F79228;
     color: white;
     border: none;
     padding: 12px;
@@ -429,7 +450,7 @@ body {
 }
 
 .btn-all-news:hover {
-    background-color: #e67e22;
+    background-color: #E88118;
 }
 
 /* Footer */
@@ -475,7 +496,7 @@ body {
 }
 
 .contact-list li i {
-    color: #f39c12;
+    color: #F79228;
     margin-top: 3px;
     width: 14px;
 }

@@ -29,7 +29,7 @@ ul {
 
 /* Navbar */
 .admin-navbar {
-    background-color: #4fc3f7;
+    background-color: #42B5E1;
     color: white;
     display: flex;
     align-items: center;
@@ -49,7 +49,7 @@ ul {
 .logo-icon {
     font-size: 2.5rem;
     background: white;
-    color: #4fc3f7;
+    color: #42B5E1;
     border-radius: 5px;
     padding: 5px;
 }
@@ -213,7 +213,7 @@ ul {
     margin-bottom: 15px;
 }
 
-.stat-icon.blue { background-color: #4fc3f7; color: white; }
+.stat-icon.blue { background-color: #42B5E1; color: white; }
 .stat-icon.orange { background-color: #ff9800; color: white; }
 .stat-icon.green { background-color: #4caf50; color: white; }
 
@@ -263,7 +263,7 @@ ul {
 }
 
 .view-all {
-    color: #4fc3f7;
+    color: #42B5E1;
     font-size: 0.9rem;
     font-weight: 500;
 }
@@ -322,7 +322,7 @@ ul {
     white-space: nowrap;
 }
 
-.blue-badge { color: #4fc3f7; }
+.blue-badge { color: #42B5E1; }
 .green-badge { background-color: #e8f5e9; color: #4caf50; }
 .red-badge { background-color: #ffebee; color: #f44336; }
 .yellow-badge { background-color: #fff8e1; color: #ffca28; }
@@ -795,7 +795,7 @@ ul {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4fc3f7, #0288d1);
+    background: linear-gradient(135deg, #42B5E1, #0288d1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -874,7 +874,7 @@ ul {
 
 .profile-meta-item i {
     font-size: 1.2rem;
-    color: #4fc3f7;
+    color: #42B5E1;
     width: 20px;
     flex-shrink: 0;
 }
@@ -931,7 +931,7 @@ ul {
 
 .section-card-header i {
     font-size: 1.5rem;
-    color: #4fc3f7;
+    color: #42B5E1;
 }
 
 .section-card-header h3 {
@@ -979,7 +979,7 @@ ul {
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    border-color: #4fc3f7;
+    border-color: #42B5E1;
     background: white;
 }
 
@@ -1017,7 +1017,7 @@ ul {
 .btn-cancel:hover { background: #e8e8e8; }
 
 .btn-save {
-    background: #4fc3f7;
+    background: #42B5E1;
     color: white;
     border: none;
     padding: 10px 28px;

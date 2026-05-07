@@ -23,7 +23,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #4DA7DB;
+    background-color: #42B5E1;
     /* Blue color from image */
     padding: 0 40px;
     height: 60px;
@@ -65,6 +65,31 @@ body {
     background-color: rgba(255, 255, 255, 0.4);
 }
 
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-icon {
+    font-size: 2rem;
+    background: white;
+    color: #42B5E1;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.brand-text h1 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.brand-text p {
+    font-size: 0.8rem;
+    margin: 0;
+    opacity: 0.9;
+}
 /* Dropdown Container */
 .dropdown {
     display: inline-block;
@@ -102,8 +127,8 @@ body {
     font-size: 1.15rem !important;
     opacity: 1 !important;
     transition: background-color 0.2s, color 0.2s;
-    border-bottom: 2px solid #e0e0e0;
-    /* Border between items */
+    margin-bottom: 10px;
+    /* Small vertical spacing between items */
 }
 
 /* Hover over links */
@@ -119,8 +144,7 @@ body {
 
 /* Profile Dropdown Specific Styles */
 .profile-link {
-    background-color: #fff3e0;
-    /* Light cream/orange */
+    background-color: #fff3e0; /* Light cream/orange */
     padding-top: 25px !important;
     padding-bottom: 25px !important;
 }
@@ -130,13 +154,22 @@ body {
 }
 
 .logout-link {
-    background-color: #f1f8e9;
-    /* Light green/white */
+    background-color: #f1f8e9; /* Light green/white */
     padding-top: 25px !important;
     padding-bottom: 25px !important;
 }
 
 .logout-link i {
+    color: #888;
+}
+
+.activity-mgmt-link {
+    background-color: #e6f2f7;
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+}
+
+.activity-mgmt-link i {
     color: #888;
 }
 
@@ -148,7 +181,6 @@ body {
 .icon-spacing {
     margin-right: 12px;
     color: #666;
-    /* Slightly lighter icon color */
     font-size: 1.3rem;
     vertical-align: middle;
 }
@@ -162,7 +194,6 @@ body {
 .navbar .nav-links .menu-icon {
     font-size: 1.2rem;
     cursor: pointer;
-    margin-left: 10px;
 }
 
 /* ========================================= */
@@ -276,7 +307,7 @@ body {
 }
 
 .card-footer i {
-    color: #4DA7DB;
+    color: #42B5E1;
     font-size: 1.2rem;
 }
 
@@ -371,7 +402,7 @@ body {
 }
 
 .contact-list li i {
-    color: #f39c12;
+    color: #F79228;
     margin-top: 3px;
     width: 14px;
 }

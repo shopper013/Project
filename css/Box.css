@@ -113,7 +113,7 @@
 
 
 .gallery-item.active-border img {
-    border: 4px solid #4DA7DB; /* เส้นขอบสีฟ้าตามรูปที่ 3 ในตัวอย่าง */
+    border: 4px solid #42B5E1; /* เส้นขอบสีฟ้าตามรูปที่ 3 ในตัวอย่าง */
 }
 
 /* Section Styling */
@@ -134,7 +134,7 @@
     margin: 0;
 }
 
-.gear-icon { color: #f39c12; font-size: 1.8rem; }
+.gear-icon { color: #F79228; font-size: 1.8rem; }
 .book-icon { color: #3498db; font-size: 1.8rem; }
 
 .description {
