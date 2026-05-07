@@ -91,7 +91,7 @@ body.profile-page-body {
 .profile-cover {
     height: 130px;
     width: 100%;
-    background-color: #f39c12; /* Orange cover */
+    background-color: #F79228; /* Orange cover */
     position: absolute;
     top: 0;
     left: 0;
@@ -166,7 +166,7 @@ body.profile-page-body {
 }
 
 .text-orange {
-    color: #f39c12;
+    color: #F79228;
 }
 
 /* Personal Info Card */
@@ -191,7 +191,7 @@ body.profile-page-body {
 }
 
 .btn-edit {
-    background-color: #f39c12;
+    background-color: #F79228;
     color: white;
     border: none;
     padding: 8px 18px;
@@ -207,7 +207,7 @@ body.profile-page-body {
 }
 
 .btn-edit:hover {
-    background-color: #e67e22;
+    background-color: #E88118;
 }
 
 .info-grid {
