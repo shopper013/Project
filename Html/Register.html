@@ -20,40 +20,40 @@
 
         <div class="input_box">
             <i class="fa-solid fa-id-card"></i>
-            <input type="text" inputmode="numeric" maxlength="17" placeholder="ID Card Number" required
+            <input type="text" id="id_card" inputmode="numeric" maxlength="17" placeholder="ID Card Number" required
                 oninvalid="this.setCustomValidity('กรุณากรอกเลขประจำตัว')"
                 oninput="this.setCustomValidity(''); formatIDCard(this)">
         </div>
 
         <div class="input_box">
             <i class="fa-solid fa-user"></i>
-            <input type="text" placeholder="ชื่อ" pattern="^[ก-๙]+$" required
+            <input type="text" id="thai_first_name" placeholder="ชื่อ" pattern="^[ก-๙]+$" required
                 oninvalid="this.setCustomValidity(this.value ?  'กรุณากรอกเป็นภาษาไทยเท่านั้น' : 'กรุณากรอกชื่อ')"
                 oninput="this.setCustomValidity('')">
-            <input type="text" placeholder="นามสกุล" pattern="^[ก-๙]+$" required
+            <input type="text" id="thai_last_name" placeholder="นามสกุล" pattern="^[ก-๙]+$" required
                 oninvalid="this.setCustomValidity(this.value ?  'กรุณากรอกเป็นภาษาไทยเท่านั้น' : 'กรุณากรอกนามสกุล')"
                 oninput="this.setCustomValidity('')">
         </div>
 
         <div class="input_box">
             <i class="fa-solid fa-user"></i>
-            <input type="text" placeholder="First Name" pattern="^[a-zA-Z]+$" required
+            <input type="text" id="eng_first_name" placeholder="First Name" pattern="^[a-zA-Z]+$" required
                 oninvalid="this.setCustomValidity(this.value ? 'Please enter English letters only' : 'Please enter your First Name')"
                 oninput="this.setCustomValidity('')">
-            <input type="text" placeholder="Last Name" pattern="^[a-zA-Z]+$" required
+            <input type="text" id="eng_last_name" placeholder="Last Name" pattern="^[a-zA-Z]+$" required
                 oninvalid="this.setCustomValidity(this.value ? 'Please enter English  letters only' : 'Please enter your Last Name')"
                 oninput="this.setCustomValidity('')">
         </div>
 
         <div class="input_box">
             <i class="fa-solid fa-school-flag"></i>
-            <input type="text" placeholder="School" required oninvalid="this.setCustomValidity('กรุณากรอกโรงเรียน')"
+            <input type="text" id="school" placeholder="School" required oninvalid="this.setCustomValidity('กรุณากรอกโรงเรียน')"
                 oninput="this.setCustomValidity('')">
         </div>
 
         <div class="input_box">
             <i class="fa-solid fa-cake-candles"></i>
-            <input type="text" placeholder="Birthday" onfocus="(this.type='date')" onblur="(this.type='text')" required
+            <input type="text" id="birthday" placeholder="Birthday" onfocus="(this.type='date')" onblur="(this.type='text')" required
                 oninvalid="this.setCustomValidity('กรุณากรอกวันเกิด')"
                 oninput="this.setCustomValidity(''); this.setCustomValidity('')">
 
@@ -61,13 +61,13 @@
 
         <div class="input_box">
             <i class="fa-solid fa-envelope"></i>
-            <input type="email" placeholder="Email" required oninvalid="this.setCustomValidity('กรุณากรอก Email')"
+            <input type="email" id="email" placeholder="Email" required oninvalid="this.setCustomValidity('กรุณากรอก Email')"
                 oninput="this.setCustomValidity('')">
         </div>
 
         <div class="input_box">
             <i class="fa-solid fa-phone"></i>
-            <input type="tel" inputmode="numeric" maxlength="12" placeholder="Tel." required
+            <input type="tel" id="telephone" inputmode="numeric" maxlength="12" placeholder="Tel." required
                 oninvalid="this.setCustomValidity('กรุณากรอกเบอร์โทรศัพท์')"
                 oninput="this.setCustomValidity(''); formatPhoneNumber(this)">
         </div>

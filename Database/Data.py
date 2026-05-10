@@ -1,25 +1,88 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template_string
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import urllib
+from flask_cors import CORS
+
+VERIFY_HTML_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify Email - Activity Mod FIET</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
+        body {
+            background: linear-gradient(to top, #70D0F4, #CCE4ED);
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .box {
+            background: #FFFAFA;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+        }
+        h1 { color: #333; font-size: 24px; margin-bottom: 10px; }
+        p { color: #666; font-size: 16px; margin-bottom: 30px; }
+        a.btn {
+            background-color: #70D0F4;
+            color: #fff;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        a.btn:hover { background-color: #55bde3; }
+        .success { color: #4CAF50; font-size: 60px; margin-bottom: 20px; font-weight: bold; }
+        .error { color: #F44336; font-size: 60px; margin-bottom: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="{{ status_class }}">{{ icon|safe }}</div>
+        <h1>{{ title }}</h1>
+        <p>{{ message }}</p>
+        <a href="#" onclick="window.close(); return false;" class="btn">ปิดหน้าต่างนี้</a>
+    </div>
+</body>
+</html>
+"""
 
 app = Flask(__name__)
 CORS(app)
 
 # ==========================================
+# ตั้งค่า Email (SMTP) สำหรับส่งลิงก์ยืนยันตัวตน
+# ==========================================
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'activitymodfiet@gmail.com' # <--- ใส่อีเมล Gmail ของคุณ
+app.config['MAIL_PASSWORD'] = 'kiljfwqdsnecfzse'    # <--- ใส่ App Password ที่ได้จาก Google 16 หลัก
+
+mail = Mail(app)
+s = URLSafeTimedSerializer('my_super_secret_key_for_fiet') # รหัสสำหรับเข้ารหัส Token
 # 1. ตั้งค่าการเชื่อมต่อ SQL Server
 # ==========================================
-# จากรูป SERVER ของคุณคือ 'Shopper\SQLEXPRESS'
-SERVER = r'Shopper\SQLEXPRESS' 
-DATABASE = 'Project' # <--- เปลี่ยนเป็นชื่อ Database ของคุณ
+SERVER = r'LAPTOP-JUCKF4OA\SQLEXPRESS' 
+DATABASE = 'Activity Mod FIET' # <--- เปลี่ยนเป็นชื่อ Database ของคุณ
 USERNAME = 'sa' # ถ้าใช้ Windows Authentication ปล่อยว่างไว้
 PASSWORD = 'P@sswOrd'
 
-# กำหนด Connection String (ใช้ Windows Authentication เป็นค่าเริ่มต้น)
-# connection_string = f"Driver={{ODBC Driver 17 for SQL Server}};Server={SERVER};Database={DATABASE};Trusted_Connection=yes;"
-
-# หากต้องการใช้ SQL Server Authentication (ใส่รหัสผ่าน) ให้ใช้บรรทัดนี้แทน:
-connection_string = f"Driver={{ODBC Driver 17 for SQL Server}};Server={SERVER};Database={DATABASE};UID={USERNAME};PWD={PASSWORD};"
+# กำหนด Connection String (เปลี่ยนมาใช้ Windows Authentication เพื่อแก้ปัญหาเชื่อมต่อ)
+connection_string = f"Driver={{ODBC Driver 17 for SQL Server}};Server={SERVER};Database={DATABASE};Trusted_Connection=yes;"
 
 params = urllib.parse.quote_plus(connection_string)
 app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % params
@@ -39,12 +102,13 @@ class User(db.Model):
     username = db.Column(db.NVARCHAR(100))
     password = db.Column(db.NVARCHAR(100), nullable=True) # อิงตามที่ติ๊ก Allow Nulls ไว้ในรูป
     role = db.Column(db.NVARCHAR(50))
+    is_verified = db.Column(db.Boolean, default=False) # เพิ่มสถานะยืนยันอีเมล
 
 class StudentUser(db.Model):
     __tablename__ = 'StudentUser'
     __table_args__ = {'schema': 'dbo'}
     
-    UserID = db.Column(db.Integer, primary_key=True)
+    UserID = db.Column('User_ID', db.Integer, primary_key=True, autoincrement=False) # แมพชื่อให้ตรงกับ User_ID ในฐานข้อมูล
     ThaiFirstName = db.Column(db.NVARCHAR(300))
     ThaiLastName = db.Column(db.NVARCHAR(300))
     School = db.Column(db.NVARCHAR(100))
@@ -53,7 +117,7 @@ class TeacherUser(db.Model):
     __tablename__ = 'TeacherUser'
     __table_args__ = {'schema': 'dbo'}
     
-    UserID = db.Column(db.Integer, primary_key=True)
+    UserID = db.Column(db.Integer, primary_key=True, autoincrement=False)
     FirstName = db.Column(db.NVARCHAR(300))
     LastName = db.Column(db.NVARCHAR(300))
     Major = db.Column(db.NVARCHAR(100))
@@ -84,6 +148,10 @@ def login():
 
         # สำหรับ Student รหัสผ่านใน DB อาจเป็น NULL (None)
         if user and (user.password == password_input or user.password is None):
+            # ตรวจสอบว่ายืนยันอีเมลหรือยัง (เฉพาะคนที่เพิ่งสมัครและมีสถานะ False)
+            if hasattr(user, 'is_verified') and user.is_verified == False:
+                return jsonify({'status': 'error', 'message': 'กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ (เช็คกล่องจดหมายของคุณ)'}), 401
+
             # ล็อกอินสำเร็จ! จะตรวจสอบ role และดึงข้อมูลเพิ่มเติมจากตารางอื่น
             user_info = None
             
@@ -116,6 +184,85 @@ def login():
             
     except Exception as e:
         return jsonify({'status': 'error', 'message': f'Database Error: {str(e)}'}), 500
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    id_card = data.get('id_card')
+    email = data.get('email')
+
+    if not id_card or not email:
+        return jsonify({'status': 'error', 'message': 'ข้อมูลไม่ครบถ้วน'}), 400
+
+    try:
+        # เช็คว่ามีคนใช้ ID นี้สมัครไปแล้วหรือยัง
+        existing_user = User.query.filter_by(username=id_card).first()
+        if existing_user:
+            return jsonify({'status': 'error', 'message': 'รหัสประจำตัวนี้ถูกใช้ลงทะเบียนแล้ว'}), 400
+
+        # 1. บันทึกข้อมูลลงตาราง User หลักก่อน (is_verified = False)
+        new_user = User(username=id_card, password=None, role='student', is_verified=False)
+        db.session.add(new_user)
+        db.session.commit() # เซฟเพื่อให้ได้ ID อัตโนมัติมาก่อน
+
+        # 2. บันทึกข้อมูลลงตาราง StudentUser
+        new_student = StudentUser(
+            UserID=new_user.ID,
+            ThaiFirstName=data.get('thai_first_name'),
+            ThaiLastName=data.get('thai_last_name'),
+            School=data.get('school')
+            # คุณสามารถเพิ่มคอลัมน์ Email, Telephone ได้ถ้าใน SQL Server สร้างไว้
+        )
+        db.session.add(new_student)
+        db.session.commit()
+
+        # 3. สร้าง Token และส่ง Email
+        token = s.dumps(email, salt='email-confirm')
+        
+        # ส่งลิงก์ไปยัง API verify พร้อมแนบ Token และ ID ของผู้ใช้
+        confirm_url = f"http://127.0.0.1:5000/verify/{token}?user_id={new_user.ID}"
+
+        msg = Message('ยืนยันการสมัครสมาชิก Activity Mod FIET', sender=app.config['MAIL_USERNAME'], recipients=[email])
+        msg.body = f"สวัสดี {data.get('thai_first_name')},\n\nกรุณาคลิกลิงก์ด้านล่างเพื่อยืนยันบัญชีของคุณ:\n{confirm_url}\n\nลิงก์นี้มีอายุ 1 ชั่วโมง"
+        msg.html = f"""
+        <div style="font-family: 'Kanit', Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 30px; background-color: #f9f9f9; border-radius: 10px; text-align: center; border: 1px solid #eee;">
+            <h2 style="color: #333;">ยืนยันการสมัครสมาชิก</h2>
+            <p style="color: #555; font-size: 16px;">สวัสดีคุณ <strong>{data.get('thai_first_name')}</strong>,</p>
+            <p style="color: #555; font-size: 16px;">ขอบคุณที่สมัครเข้าร่วม Activity Mod FIET กรุณาคลิกที่ปุ่มด้านล่างเพื่อยืนยันอีเมลของคุณครับ</p>
+            <div style="margin: 30px 0;">
+                <a href="{confirm_url}" style="background-color: #70D0F4; color: #fff; padding: 14px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px; display: inline-block;">Verify Account</a>
+            </div>
+            <p style="color: #999; font-size: 12px;">* ลิงก์นี้มีอายุ 1 ชั่วโมง หากคุณไม่ได้สมัครสมาชิก กรุณาเพิกเฉยต่ออีเมลฉบับนี้</p>
+        </div>
+        """
+        
+        mail.send(msg)
+
+        return jsonify({'status': 'success', 'message': 'กรุณาเช็คอีเมลเพื่อยืนยันการสมัคร'}), 200
+
+    except Exception as e:
+        db.session.rollback() # ยกเลิกการเซฟถ้าพัง
+        return jsonify({'status': 'error', 'message': f'Error: {str(e)}'}), 500
+
+@app.route('/verify/<token>')
+def verify_email(token):
+    user_id = request.args.get('user_id')
+    try:
+        # เช็คว่า Token ถูกต้องและยังไม่หมดอายุ (3600 วิ = 1 ชั่วโมง)
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+        
+        user = User.query.get(user_id)
+        if user:
+            user.is_verified = True
+            db.session.commit()
+            return render_template_string(VERIFY_HTML_TEMPLATE, status_class="success", icon="✓", title="ยืนยันอีเมลสำเร็จ!", message="คุณสามารถปิดหน้าต่างนี้และกลับไปเข้าสู่ระบบที่หน้าเว็บได้แล้วครับ")
+        else:
+            return render_template_string(VERIFY_HTML_TEMPLATE, status_class="error", icon="✗", title="ไม่พบผู้ใช้งาน", message="ระบบไม่พบข้อมูลผู้ใช้งานนี้ในระบบ")
+
+    except SignatureExpired:
+        return render_template_string(VERIFY_HTML_TEMPLATE, status_class="error", icon="⏱", title="ลิงก์หมดอายุแล้ว!", message="กรุณาสมัครสมาชิกใหม่อีกครั้ง")
+    except Exception as e:
+        return render_template_string(VERIFY_HTML_TEMPLATE, status_class="error", icon="⚠️", title="เกิดข้อผิดพลาด", message="รหัส Token ไม่ถูกต้องหรือเกิดข้อผิดพลาดบางประการ")
 
 @app.route('/', methods=['GET'])
 def home():

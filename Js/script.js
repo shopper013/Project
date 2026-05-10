@@ -123,26 +123,62 @@ loginForms.forEach(form => {
 //                           REGISTER
 // ===============================================================
 
-function submitForm(event) {
-            event.preventDefault();
+async function submitForm(event) {
+    event.preventDefault();
 
+    // ดึงข้อมูลจากฟอร์ม
+    const data = {
+        id_card: document.getElementById('id_card').value.replace(/-/g, ''),
+        thai_first_name: document.getElementById('thai_first_name').value,
+        thai_last_name: document.getElementById('thai_last_name').value,
+        eng_first_name: document.getElementById('eng_first_name').value,
+        eng_last_name: document.getElementById('eng_last_name').value,
+        school: document.getElementById('school').value,
+        birthday: document.getElementById('birthday').value,
+        email: document.getElementById('email').value,
+        telephone: document.getElementById('telephone').value.replace(/-/g, '')
+    };
+
+    // แสดงหน้าโหลด
+    Swal.fire({
+        title: 'กำลังลงทะเบียน...',
+        text: 'กรุณารอสักครู่ ระบบกำลังส่งอีเมลยืนยัน',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
             Swal.fire({
                 title: 'ลงทะเบียนสำเร็จ!',
-                text: 'ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว',
+                text: 'กรุณาตรวจสอบอีเมลของคุณเพื่อยืนยันตัวตน',
                 icon: 'success',
                 confirmButtonText: 'ตกลง',
                 confirmButtonColor: '#70D0F4',
                 allowOutsideClick: false 
-            }).then((result) => {
-                // เมื่อผู้ใช้กดปุ่ม "ตกลง"
-                if (result.isConfirmed) {
-                    if (window.opener) {
-                    }
-
-                    window.close();
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    window.location.href = "Activity_FIET_Webpage.html"; // กลับไปหน้าล็อกอิน
                 }
             });
+        } else {
+            Swal.fire('ข้อผิดพลาด', result.message || 'ไม่สามารถลงทะเบียนได้', 'error');
         }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้', 'error');
+    }
+}
 
 function goLogin(event) {
     event.preventDefault(); // ป้องกันไม่ให้หน้าเว็บกระตุกไปบนสุดเพราะ href="#"
