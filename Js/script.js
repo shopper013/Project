@@ -31,6 +31,94 @@ if (togglePassword && passwordInput) {
     });
 }
 
+// ---------------------------------------------------------------
+// API Login Handling (การแจ้งเตือนเหมือนช่องที่ยังไม่ได้ใส่)
+// ---------------------------------------------------------------
+const loginForms = document.querySelectorAll('.login-inputs');
+
+loginForms.forEach(form => {
+    form.addEventListener('submit', async function(e) {
+        // ถ้าฟอร์มนี้ชี้ไปหน้าที่ไม่ได้ใช้ API อาจจะไม่ต้อง block แต่ในที่นี้เราใช้ API นำ
+        // ถ้าอยากใช้เป็น UI Demo เฉยๆ โดยไม่ต่อ Python ให้เอาโค้ดใน try...catch ออก
+        e.preventDefault(); 
+
+        const inputs = this.querySelectorAll('input');
+        let username = '';
+        let password = '';
+        
+        // เช็คว่ามีกี่ input 
+        // ถ้าเป็น Teacher มี 2 (user, pass)
+        // ถ้าเป็น Student มี 1 (ID Card)
+        if (inputs.length >= 2) {
+            username = inputs[0].value;
+            password = inputs[1].value;
+        } else if (inputs.length === 1) {
+            // สำหรับ Student ลบเครื่องหมาย - ออกให้เหลือแต่ตัวเลข ก่อนส่งไปที่ Database
+            username = inputs[0].value.replace(/-/g, '');
+            password = inputs[0].value.replace(/-/g, ''); // Student อาจจะไม่มีฟิลด์รหัสผ่าน
+        }
+
+        try {
+            // สมมติว่ายิงไปหา Python ที่ http://127.0.0.1:5000/login
+            const response = await fetch('http://127.0.0.1:5000/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username, password: password })
+            });
+
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                // หา path ปัจจุบันของไฟล์ HTML เพื่อป้องกันปัญหาจาก <base> และ file:///
+                let currentUrl = window.location.href.split('?')[0].split('#')[0];
+                let basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+                
+                // ตัดช่องว่างและทำเป็นตัวพิมพ์เล็ก ป้องกันปัญหาข้อมูลใน DB พิมพ์ใหญ่/เล็กไม่ตรงกัน
+                let userRole = (data.data && data.data.role) ? data.data.role.toString().toLowerCase().trim() : '';
+
+                // ถ้าสำเร็จ เปลี่ยนหน้าตามเป้าหมายของฟอร์ม หรือตาม role
+                if (userRole === 'admin') {
+                    window.location.href = basePath + "/AdminBuild_Activity.html";
+                } else if (userRole === 'teacher') {
+                    window.location.href = basePath + "/HomepageTeacher.html";
+                } else {
+                    window.location.href = basePath + "/Homepage.html";
+                }
+            } else {
+                // ถ้าไม่สำเร็จ ให้แสดงกรอบแดงและแจ้งเตือน
+                const originalOnInvalid = inputs[0].getAttribute('oninvalid');
+                if (originalOnInvalid) inputs[0].removeAttribute('oninvalid');
+                
+                inputs[0].setCustomValidity('User หรือ รหัสผ่านไม่ถูกต้อง');
+                inputs[0].reportValidity();
+                
+                // เคลียร์ช่อง input ทั้งหมดให้ว่างเปล่า
+                inputs.forEach(input => input.value = '');
+                
+                // ล้างค่าเมื่อผู้ใช้เริ่มพิมพ์ใหม่ จะได้กลับมาเป็นปกติ
+                inputs[0].addEventListener('input', function() {
+                    this.setCustomValidity('');
+                    if (originalOnInvalid) this.setAttribute('oninvalid', originalOnInvalid);
+                }, { once: true });
+            }
+        } catch (error) {
+            // กรณีลืมเปิด Python Server หรือต่อไม่ได้
+            console.error('API Error:', error);
+            alert("ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ Python ได้! ลืมรัน Data.py หรือเปล่า?\n" + error);
+            const originalOnInvalid = inputs[0].getAttribute('oninvalid');
+            if (originalOnInvalid) inputs[0].removeAttribute('oninvalid');
+            
+            inputs[0].setCustomValidity('ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่');
+            inputs[0].reportValidity();
+            
+            inputs[0].addEventListener('input', function() {
+                this.setCustomValidity('');
+                if (originalOnInvalid) this.setAttribute('oninvalid', originalOnInvalid);
+            }, { once: true });
+        }
+    });
+});
+
 // ===============================================================
 //                           REGISTER
 // ===============================================================
