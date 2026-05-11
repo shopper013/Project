@@ -76,6 +76,13 @@ loginForms.forEach(form => {
                 // ตัดช่องว่างและทำเป็นตัวพิมพ์เล็ก ป้องกันปัญหาข้อมูลใน DB พิมพ์ใหญ่/เล็กไม่ตรงกัน
                 let userRole = (data.data && data.data.role) ? data.data.role.toString().toLowerCase().trim() : '';
 
+                // บันทึกข้อมูลผู้ใช้ลง localStorage เพื่อนำไปแสดงผลในหน้าอื่นๆ
+                if (data.data) {
+                    localStorage.setItem('user_full_name', data.data.full_name || '');
+                    localStorage.setItem('user_role', userRole);
+                    localStorage.setItem('user_id', data.data.user_id || '');
+                }
+
                 // ถ้าสำเร็จ เปลี่ยนหน้าตามเป้าหมายของฟอร์ม หรือตาม role
                 if (userRole === 'admin') {
                     window.location.href = basePath + "/AdminBuild_Activity.html";
@@ -673,3 +680,44 @@ document.addEventListener('click', function(e) {
     }
 });
 } // end AdminBuild guard
+
+// ===============================================================
+//                           AUTH & PROFILE
+// ===============================================================
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. ดึงชื่อผู้ใช้มาแสดงใน Sidebar
+    const profileLink = document.querySelector('.profile-dropdown .profile-link');
+    if (profileLink) {
+        const fullName = localStorage.getItem('user_full_name');
+        const userRole = localStorage.getItem('user_role');
+        
+        if (fullName && fullName !== 'null' && fullName !== 'undefined') {
+            let displayName = fullName;
+            // ถ้าเป็นอาจารย์ และชื่อยังไม่มีคำว่าอาจารย์ ให้เติมเข้าไป
+            if (userRole === 'teacher' && !displayName.startsWith('อาจารย์')) {
+                displayName = 'อาจารย์ ' + displayName;
+            }
+            
+            // เก็บ icon แบบเดิมไว้แล้วต่อด้วยชื่อ
+            profileLink.innerHTML = `<i class="fa-regular fa-circle-user icon-spacing"></i> ${displayName}`;
+            
+            // ตั้งค่าลิงก์ไปยังหน้าโปรไฟล์
+            if (userRole === 'teacher') {
+                profileLink.href = 'Profile.html';
+            } else if (userRole === 'student') {
+                profileLink.href = 'StudentProfile.html';
+            }
+        }
+    }
+
+    // 2. จัดการเมื่อกดออกจากระบบ ให้ล้างค่า localStorage
+    const logoutLinks = document.querySelectorAll('.logout-link');
+    logoutLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            localStorage.removeItem('user_full_name');
+            localStorage.removeItem('user_role');
+            localStorage.removeItem('user_id');
+        });
+    });
+});
+
