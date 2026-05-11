@@ -421,7 +421,8 @@ const majorData = {
         subtitle: "Educational Communications and Technology",
         images: ["../Photo/ECT.png", "../Photo/ECT2.jpg", "../Photo/ECT.png"],
         description: "หลักสูตรเทคโนโลยีบัณฑิต สาขาวิชาเทคโนโลยีการศึกษาและสื่อสารมวลชน เป็นหลักสูตรผลิตบัณฑิตที่มีความรู้ในภาคทฤษฎีและภาคปฏิบัติ ในศาสตร์เทคโนโลยีการศึกษาและสื่อสารมวลชน ที่เก่งและดี มีจรรยาบรรณในวิชาชีพ",
-        curriculum: `<div class="course-group"><span class="course-title">● รอข้อมูลหลักสูตร</span></div>`
+        curriculum: `<div class="course-group"><span class="course-title">● ปริญญาตรี เทคโนโลยีบัณฑิต (ทล.บ) 4 ปี</span>
+        <ul><li><i class="fa-solid fa-graduation-cap"></i> สาขาเทคโนโลยีการศึกษาและสื่อสารมวลชน</li></ul></div>`
     },
     ppt: {
         logo: "../Photo/Logo_PPT.png",
