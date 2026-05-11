@@ -76,8 +76,8 @@ mail = Mail(app)
 s = URLSafeTimedSerializer('my_super_secret_key_for_fiet') # รหัสสำหรับเข้ารหัส Token
 # 1. ตั้งค่าการเชื่อมต่อ SQL Server
 # ==========================================
-SERVER = r'LAPTOP-JUCKF4OA\SQLEXPRESS' 
-DATABASE = 'Activity Mod FIET' # <--- เปลี่ยนเป็นชื่อ Database ของคุณ
+SERVER = r'.\SQLEXPRESS' 
+DATABASE = 'Project' # <--- เปลี่ยนเป็นชื่อ Database ของคุณ
 USERNAME = 'sa' # ถ้าใช้ Windows Authentication ปล่อยว่างไว้
 PASSWORD = 'P@sswOrd'
 
@@ -108,7 +108,7 @@ class StudentUser(db.Model):
     __tablename__ = 'StudentUser'
     __table_args__ = {'schema': 'dbo'}
     
-    UserID = db.Column('User_ID', db.Integer, primary_key=True, autoincrement=False) # แมพชื่อให้ตรงกับ User_ID ในฐานข้อมูล
+    UserID = db.Column(db.Integer, primary_key=True, autoincrement=False) # เปลี่ยนให้ตรงกับ UserID ในฐานข้อมูล
     ThaiFirstName = db.Column(db.NVARCHAR(300))
     ThaiLastName = db.Column(db.NVARCHAR(300))
     School = db.Column(db.NVARCHAR(100))
