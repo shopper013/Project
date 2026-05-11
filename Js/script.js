@@ -84,22 +84,77 @@ loginForms.forEach(form => {
                 } else {
                     window.location.href = basePath + "/Homepage.html";
                 }
+            } else if (data.status === 'otp_required') {
+                // แสดหน้าต่างให้กรอก OTP
+                const { value: verifyData } = await Swal.fire({
+                    title: 'ยืนยันรหัส OTP',
+                    text: 'กรุณากรอกรหัส 6 หลักที่ส่งไปยังอีเมลของคุณ',
+                    input: 'text',
+                    inputPlaceholder: 'กรอกรหัส OTP',
+                    inputAttributes: {
+                        maxlength: 6,
+                        autocapitalize: 'off',
+                        autocorrect: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'ยืนยัน',
+                    cancelButtonText: 'ยกเลิก',
+                    confirmButtonColor: '#70D0F4',
+                    showLoaderOnConfirm: true,
+                    preConfirm: async (code) => {
+                        try {
+                            const verifyResponse = await fetch('http://127.0.0.1:5000/verify_otp', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ user_id: data.data.user_id, otp_code: code })
+                            });
+                            const result = await verifyResponse.json();
+                            if (result.status !== 'success') {
+                                Swal.showValidationMessage(result.message || 'รหัส OTP ไม่ถูกต้อง');
+                            }
+                            return result;
+                        } catch (error) {
+                            Swal.showValidationMessage(`เกิดข้อผิดพลาด: ${error}`);
+                        }
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                });
+
+                if (verifyData && verifyData.status === 'success') {
+                    Swal.fire({
+                        title: 'สำเร็จ!',
+                        text: 'เข้าสู่ระบบเรียบร้อยแล้ว',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        let currentUrl = window.location.href.split('?')[0].split('#')[0];
+                        let basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+                        let userRole = (verifyData.data && verifyData.data.role) ? verifyData.data.role.toString().toLowerCase().trim() : '';
+                        
+                        if (userRole === 'admin') {
+                            window.location.href = basePath + "/AdminBuild_Activity.html";
+                        } else if (userRole === 'teacher') {
+                            window.location.href = basePath + "/HomepageTeacher.html";
+                        } else {
+                            window.location.href = basePath + "/Homepage.html";
+                        }
+                    });
+                } else {
+                    inputs.forEach(input => input.value = '');
+                }
             } else {
-                // ถ้าไม่สำเร็จ ให้แสดงกรอบแดงและแจ้งเตือน
-                const originalOnInvalid = inputs[0].getAttribute('oninvalid');
-                if (originalOnInvalid) inputs[0].removeAttribute('oninvalid');
-                
-                inputs[0].setCustomValidity('User หรือ รหัสผ่านไม่ถูกต้อง');
-                inputs[0].reportValidity();
+                // ถ้าไม่สำเร็จ ให้แสดง SweetAlert แจ้งเตือน
+                Swal.fire({
+                    title: 'เข้าสู่ระบบไม่สำเร็จ',
+                    text: data.message || 'User หรือ รหัสผ่านไม่ถูกต้อง',
+                    icon: 'error',
+                    confirmButtonText: 'ตกลง',
+                    confirmButtonColor: '#70D0F4'
+                });
                 
                 // เคลียร์ช่อง input ทั้งหมดให้ว่างเปล่า
                 inputs.forEach(input => input.value = '');
-                
-                // ล้างค่าเมื่อผู้ใช้เริ่มพิมพ์ใหม่ จะได้กลับมาเป็นปกติ
-                inputs[0].addEventListener('input', function() {
-                    this.setCustomValidity('');
-                    if (originalOnInvalid) this.setAttribute('oninvalid', originalOnInvalid);
-                }, { once: true });
             }
         } catch (error) {
             // กรณีลืมเปิด Python Server หรือต่อไม่ได้
