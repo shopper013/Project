@@ -4,6 +4,8 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import urllib
 from flask_cors import CORS
+from datetime import datetime, timedelta
+import random
 
 VERIFY_HTML_TEMPLATE = """
 <!DOCTYPE html>
@@ -103,6 +105,9 @@ class User(db.Model):
     password = db.Column(db.NVARCHAR(100), nullable=True) # อิงตามที่ติ๊ก Allow Nulls ไว้ในรูป
     role = db.Column(db.NVARCHAR(50))
     is_verified = db.Column(db.Boolean, default=False) # เพิ่มสถานะยืนยันอีเมล
+    email = db.Column(db.NVARCHAR(255), nullable=True)
+    otp_code = db.Column(db.NVARCHAR(10), nullable=True)
+    otp_expiry = db.Column(db.DATETIME, nullable=True)
 
 class StudentUser(db.Model):
     __tablename__ = 'StudentUser'
@@ -152,36 +157,91 @@ def login():
             if hasattr(user, 'is_verified') and user.is_verified == False:
                 return jsonify({'status': 'error', 'message': 'กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ (เช็คกล่องจดหมายของคุณ)'}), 401
 
-            # ล็อกอินสำเร็จ! จะตรวจสอบ role และดึงข้อมูลเพิ่มเติมจากตารางอื่น
-            user_info = None
-            
-            if user.role == 'student':
-                student = StudentUser.query.filter_by(UserID=user.ID).first()
-                if student:
-                    user_info = f"{student.ThaiFirstName} {student.ThaiLastName}"
-            elif user.role == 'teacher':
-                teacher = TeacherUser.query.filter_by(UserID=user.ID).first()
-                if teacher:
-                    user_info = f"{teacher.FirstName} {teacher.LastName}"
-            elif user.role == 'staff' or user.role == 'admin':
-                # staff = StaffUser.query.filter_by(UserID=user.ID).first()
-                # if staff:
-                #     user_info = f"{staff.FirstName} {staff.LastName}"
-                pass
+            if not user.email:
+                return jsonify({'status': 'error', 'message': 'บัญชีนี้ไม่มีอีเมลในระบบ ไม่สามารถส่งรหัส OTP ได้'}), 401
+
+            # ---------------------------------------------
+            # สร้าง OTP และส่งไปยังอีเมล
+            # ---------------------------------------------
+            otp = str(random.randint(100000, 999999))
+            user.otp_code = otp
+            user.otp_expiry = datetime.now() + timedelta(minutes=5)
+            db.session.commit()
+
+            msg = Message('รหัสยืนยันการเข้าสู่ระบบ (OTP)', sender=app.config['MAIL_USERNAME'], recipients=[user.email])
+            msg.body = f"รหัส OTP สำหรับเข้าสู่ระบบของคุณคือ: {otp}\n\nรหัสนี้จะหมดอายุภายใน 5 นาที"
+            try:
+                mail.send(msg)
+            except Exception as e:
+                return jsonify({'status': 'error', 'message': 'ไม่สามารถส่งอีเมล OTP ได้ กรุณาลองใหม่ภายหลัง'}), 500
 
             return jsonify({
-                'status': 'success',
-                'message': 'เข้าสู่ระบบสำเร็จ',
+                'status': 'otp_required',
+                'message': 'ระบบได้ส่งรหัส OTP ไปยังอีเมลของคุณแล้ว',
                 'data': {
-                    'user_id': user.ID,
-                    'username': user.username,
-                    'role': user.role,
-                    'full_name': user_info
+                    'user_id': user.ID
                 }
             }), 200
         else:
             return jsonify({'status': 'error', 'message': 'Username หรือ Password ไม่ถูกต้อง'}), 401
             
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': f'Database Error: {str(e)}'}), 500
+
+@app.route('/verify_otp', methods=['POST'])
+def verify_otp():
+    if request.is_json:
+        data = request.json
+    else:
+        data = request.form
+
+    user_id = data.get('user_id')
+    otp_code = data.get('otp_code')
+
+    if not user_id or not otp_code:
+        return jsonify({'status': 'error', 'message': 'ข้อมูลไม่ครบถ้วน'}), 400
+
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'status': 'error', 'message': 'ไม่พบผู้ใช้งาน'}), 404
+
+        if user.otp_code != otp_code:
+            return jsonify({'status': 'error', 'message': 'รหัส OTP ไม่ถูกต้อง'}), 401
+
+        if not user.otp_expiry or datetime.now() > user.otp_expiry:
+            return jsonify({'status': 'error', 'message': 'รหัส OTP หมดอายุแล้ว'}), 401
+
+        # OTP ถูกต้อง ล้างค่า OTP
+        user.otp_code = None
+        user.otp_expiry = None
+        db.session.commit()
+
+        # ล็อกอินสำเร็จ! จะตรวจสอบ role และดึงข้อมูลเพิ่มเติมจากตารางอื่น
+        user_info = None
+        
+        if user.role == 'student':
+            student = StudentUser.query.filter_by(UserID=user.ID).first()
+            if student:
+                user_info = f"{student.ThaiFirstName} {student.ThaiLastName}"
+        elif user.role == 'teacher':
+            teacher = TeacherUser.query.filter_by(UserID=user.ID).first()
+            if teacher:
+                user_info = f"{teacher.FirstName} {teacher.LastName}"
+        elif user.role == 'staff' or user.role == 'admin':
+            pass
+
+        return jsonify({
+            'status': 'success',
+            'message': 'ยืนยัน OTP สำเร็จและเข้าสู่ระบบสำเร็จ',
+            'data': {
+                'user_id': user.ID,
+                'username': user.username,
+                'role': user.role,
+                'full_name': user_info
+            }
+        }), 200
+
     except Exception as e:
         return jsonify({'status': 'error', 'message': f'Database Error: {str(e)}'}), 500
 
@@ -201,7 +261,7 @@ def register():
             return jsonify({'status': 'error', 'message': 'รหัสประจำตัวนี้ถูกใช้ลงทะเบียนแล้ว'}), 400
 
         # 1. บันทึกข้อมูลลงตาราง User หลักก่อน (is_verified = False)
-        new_user = User(username=id_card, password=None, role='student', is_verified=False)
+        new_user = User(username=id_card, password=None, role='student', is_verified=False, email=email)
         db.session.add(new_user)
         db.session.commit() # เซฟเพื่อให้ได้ ID อัตโนมัติมาก่อน
 
