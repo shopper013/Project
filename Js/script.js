@@ -6,6 +6,8 @@
 const container = document.getElementById('container');
 const officer = document.getElementById('officer');
 const student = document.getElementById('student');
+window.API_BASE_URL = window.API_BASE_URL || 'http://127.0.0.1:5000';
+const API_BASE_URL = window.API_BASE_URL;
 
 
 if (officer) {
@@ -34,6 +36,27 @@ if (togglePassword && passwordInput) {
 // ---------------------------------------------------------------
 // API Login Handling (การแจ้งเตือนเหมือนช่องที่ยังไม่ได้ใส่)
 // ---------------------------------------------------------------
+
+function handleLoginSuccess(userData) {
+    let currentUrl = window.location.href.split('?')[0].split('#')[0];
+    let basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+    let userRole = (userData && userData.role) ? userData.role.toString().toLowerCase().trim() : '';
+
+    if (userData) {
+        localStorage.setItem('user_full_name', userData.full_name || '');
+        localStorage.setItem('user_role', userRole);
+        localStorage.setItem('user_id', userData.user_id || '');
+    }
+
+    if (userRole === 'admin') {
+        window.location.href = basePath + "/AdminBuild_Activity.html";
+    } else if (userRole === 'teacher') {
+        window.location.href = basePath + "/HomepageTeacher.html";
+    } else {
+        window.location.href = basePath + "/Homepage.html";
+    }
+}
+
 const loginForms = document.querySelectorAll('.login-inputs');
 
 loginForms.forEach(form => {
@@ -60,7 +83,7 @@ loginForms.forEach(form => {
 
         try {
             // สมมติว่ายิงไปหา Python ที่ http://127.0.0.1:5000/login
-            const response = await fetch('http://127.0.0.1:5000/login', {
+            const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: username, password: password })
@@ -69,28 +92,7 @@ loginForms.forEach(form => {
             const data = await response.json();
 
             if (data.status === 'success') {
-                // หา path ปัจจุบันของไฟล์ HTML เพื่อป้องกันปัญหาจาก <base> และ file:///
-                let currentUrl = window.location.href.split('?')[0].split('#')[0];
-                let basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-                
-                // ตัดช่องว่างและทำเป็นตัวพิมพ์เล็ก ป้องกันปัญหาข้อมูลใน DB พิมพ์ใหญ่/เล็กไม่ตรงกัน
-                let userRole = (data.data && data.data.role) ? data.data.role.toString().toLowerCase().trim() : '';
-
-                // บันทึกข้อมูลผู้ใช้ลง localStorage เพื่อนำไปแสดงผลในหน้าอื่นๆ
-                if (data.data) {
-                    localStorage.setItem('user_full_name', data.data.full_name || '');
-                    localStorage.setItem('user_role', userRole);
-                    localStorage.setItem('user_id', data.data.user_id || '');
-                }
-
-                // ถ้าสำเร็จ เปลี่ยนหน้าตามเป้าหมายของฟอร์ม หรือตาม role
-                if (userRole === 'admin') {
-                    window.location.href = basePath + "/AdminBuild_Activity.html";
-                } else if (userRole === 'teacher') {
-                    window.location.href = basePath + "/HomepageTeacher.html";
-                } else {
-                    window.location.href = basePath + "/Homepage.html";
-                }
+                handleLoginSuccess(data.data);
             } else if (data.status === 'otp_required') {
                 // แสดหน้าต่างให้กรอก OTP
                 const { value: verifyData } = await Swal.fire({
@@ -110,7 +112,7 @@ loginForms.forEach(form => {
                     showLoaderOnConfirm: true,
                     preConfirm: async (code) => {
                         try {
-                            const verifyResponse = await fetch('http://127.0.0.1:5000/verify_otp', {
+                            const verifyResponse = await fetch(`${API_BASE_URL}/verify_otp`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ user_id: data.data.user_id, otp_code: code })
@@ -135,17 +137,7 @@ loginForms.forEach(form => {
                         timer: 1500,
                         showConfirmButton: false
                     }).then(() => {
-                        let currentUrl = window.location.href.split('?')[0].split('#')[0];
-                        let basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-                        let userRole = (verifyData.data && verifyData.data.role) ? verifyData.data.role.toString().toLowerCase().trim() : '';
-                        
-                        if (userRole === 'admin') {
-                            window.location.href = basePath + "/AdminBuild_Activity.html";
-                        } else if (userRole === 'teacher') {
-                            window.location.href = basePath + "/HomepageTeacher.html";
-                        } else {
-                            window.location.href = basePath + "/Homepage.html";
-                        }
+                        handleLoginSuccess(verifyData.data);
                     });
                 } else {
                     inputs.forEach(input => input.value = '');
@@ -212,7 +204,7 @@ async function submitForm(event) {
     });
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/register', {
+        const response = await fetch(`${API_BASE_URL}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -245,11 +237,8 @@ async function submitForm(event) {
 function goLogin(event) {
     event.preventDefault(); // ป้องกันไม่ให้หน้าเว็บกระตุกไปบนสุดเพราะ href="#"
     
-    // ลองสั่งปิดหน้าต่างดูก่อน
+    // ปิดหน้าต่าง register ทิ้ง เพื่อกลับไปหน้าล็อกอินที่เปิดค้างไว้อยู่แล้ว
     window.close();
-    
-    // ถ้าเบราว์เซอร์ไม่ยอมปิดแท็บ ให้พาผู้ใช้กลับไปที่หน้าเข้าสู่ระบบอัตโนมัติ
-    window.location.href = "Activity_FIET_Webpage.html";
 }
 
 // ===============================================================
@@ -421,7 +410,8 @@ const majorData = {
         subtitle: "Educational Communications and Technology",
         images: ["../Photo/ECT.png", "../Photo/ECT2.jpg", "../Photo/ECT.png"],
         description: "หลักสูตรเทคโนโลยีบัณฑิต สาขาวิชาเทคโนโลยีการศึกษาและสื่อสารมวลชน เป็นหลักสูตรผลิตบัณฑิตที่มีความรู้ในภาคทฤษฎีและภาคปฏิบัติ ในศาสตร์เทคโนโลยีการศึกษาและสื่อสารมวลชน ที่เก่งและดี มีจรรยาบรรณในวิชาชีพ",
-        curriculum: `<div class="course-group"><span class="course-title">● รอข้อมูลหลักสูตร</span></div>`
+        curriculum: `<div class="course-group"><span class="course-title">● ปริญญาตรี เทคโนโลยีบัณฑิต (ทล.บ) 4 ปี</span>
+        <ul><li><i class="fa-solid fa-graduation-cap"></i> สาขาเทคโนโลยีการศึกษาและสื่อสารมวลชน</li></ul></div>`
     },
     ppt: {
         logo: "../Photo/Logo_PPT.png",
@@ -464,13 +454,6 @@ function closeActivityModal() {
         document.body.style.overflow = '';
     }
 }
-
-document.addEventListener('click', function(e) {
-    if (e.target.id === 'activity-modal') {
-        e.target.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-});
 
 // ===============================================================
 //                           SIDEBAR SLIDING INDICATOR
@@ -538,9 +521,12 @@ function closeMajorModal() {
     }
 }
 
+// ===============================================================
+//                           CLOSE MODALS
+// ===============================================================
 // Close modal when clicking outside of the modal container
 document.addEventListener('click', function(e) {
-    if (e.target.id === 'major-modal') {
+    if (e.target.id === 'activity-modal' || e.target.id === 'major-modal') {
         e.target.classList.remove('active');
         document.body.style.overflow = '';
     }
