@@ -36,6 +36,27 @@ if (togglePassword && passwordInput) {
 // ---------------------------------------------------------------
 // API Login Handling (การแจ้งเตือนเหมือนช่องที่ยังไม่ได้ใส่)
 // ---------------------------------------------------------------
+
+function handleLoginSuccess(userData) {
+    let currentUrl = window.location.href.split('?')[0].split('#')[0];
+    let basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+    let userRole = (userData && userData.role) ? userData.role.toString().toLowerCase().trim() : '';
+
+    if (userData) {
+        localStorage.setItem('user_full_name', userData.full_name || '');
+        localStorage.setItem('user_role', userRole);
+        localStorage.setItem('user_id', userData.user_id || '');
+    }
+
+    if (userRole === 'admin') {
+        window.location.href = basePath + "/AdminBuild_Activity.html";
+    } else if (userRole === 'teacher') {
+        window.location.href = basePath + "/HomepageTeacher.html";
+    } else {
+        window.location.href = basePath + "/Homepage.html";
+    }
+}
+
 const loginForms = document.querySelectorAll('.login-inputs');
 
 loginForms.forEach(form => {
@@ -71,28 +92,7 @@ loginForms.forEach(form => {
             const data = await response.json();
 
             if (data.status === 'success') {
-                // หา path ปัจจุบันของไฟล์ HTML เพื่อป้องกันปัญหาจาก <base> และ file:///
-                let currentUrl = window.location.href.split('?')[0].split('#')[0];
-                let basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-                
-                // ตัดช่องว่างและทำเป็นตัวพิมพ์เล็ก ป้องกันปัญหาข้อมูลใน DB พิมพ์ใหญ่/เล็กไม่ตรงกัน
-                let userRole = (data.data && data.data.role) ? data.data.role.toString().toLowerCase().trim() : '';
-
-                // บันทึกข้อมูลผู้ใช้ลง localStorage เพื่อนำไปแสดงผลในหน้าอื่นๆ
-                if (data.data) {
-                    localStorage.setItem('user_full_name', data.data.full_name || '');
-                    localStorage.setItem('user_role', userRole);
-                    localStorage.setItem('user_id', data.data.user_id || '');
-                }
-
-                // ถ้าสำเร็จ เปลี่ยนหน้าตามเป้าหมายของฟอร์ม หรือตาม role
-                if (userRole === 'admin') {
-                    window.location.href = basePath + "/AdminBuild_Activity.html";
-                } else if (userRole === 'teacher') {
-                    window.location.href = basePath + "/HomepageTeacher.html";
-                } else {
-                    window.location.href = basePath + "/Homepage.html";
-                }
+                handleLoginSuccess(data.data);
             } else if (data.status === 'otp_required') {
                 // แสดหน้าต่างให้กรอก OTP
                 const { value: verifyData } = await Swal.fire({
@@ -137,23 +137,7 @@ loginForms.forEach(form => {
                         timer: 1500,
                         showConfirmButton: false
                     }).then(() => {
-                        let currentUrl = window.location.href.split('?')[0].split('#')[0];
-                        let basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-                        let userRole = (verifyData.data && verifyData.data.role) ? verifyData.data.role.toString().toLowerCase().trim() : '';
-
-                        if (verifyData.data) {
-                            localStorage.setItem('user_full_name', verifyData.data.full_name || '');
-                            localStorage.setItem('user_role', userRole);
-                            localStorage.setItem('user_id', verifyData.data.user_id || '');
-                        }
-                        
-                        if (userRole === 'admin') {
-                            window.location.href = basePath + "/AdminBuild_Activity.html";
-                        } else if (userRole === 'teacher') {
-                            window.location.href = basePath + "/HomepageTeacher.html";
-                        } else {
-                            window.location.href = basePath + "/Homepage.html";
-                        }
+                        handleLoginSuccess(verifyData.data);
                     });
                 } else {
                     inputs.forEach(input => input.value = '');
@@ -471,13 +455,6 @@ function closeActivityModal() {
     }
 }
 
-document.addEventListener('click', function(e) {
-    if (e.target.id === 'activity-modal') {
-        e.target.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-});
-
 // ===============================================================
 //                           SIDEBAR SLIDING INDICATOR
 // ===============================================================
@@ -544,9 +521,12 @@ function closeMajorModal() {
     }
 }
 
+// ===============================================================
+//                           CLOSE MODALS
+// ===============================================================
 // Close modal when clicking outside of the modal container
 document.addEventListener('click', function(e) {
-    if (e.target.id === 'major-modal') {
+    if (e.target.id === 'activity-modal' || e.target.id === 'major-modal') {
         e.target.classList.remove('active');
         document.body.style.overflow = '';
     }
