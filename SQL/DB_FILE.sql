@@ -68,3 +68,17 @@ SELECT * FROM dbo.[User];
 SELECT * FROM dbo.StudentUser;
 SELECT * FROM dbo.TeacherUser;
 GO
+
+USE [Activity Mod FIET];
+GO
+
+-- เพิ่มเฉพาะคอลัมน์ที่ยังไม่มี
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.StudentUser') AND name = 'EngFirstName')
+    ALTER TABLE dbo.StudentUser ADD EngFirstName NVARCHAR(300) NULL;
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.StudentUser') AND name = 'EngLastName')
+    ALTER TABLE dbo.StudentUser ADD EngLastName NVARCHAR(300) NULL;
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.StudentUser') AND name = 'Birthday')
+    ALTER TABLE dbo.StudentUser ADD Birthday DATE NULL;
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.StudentUser') AND name = 'Telephone')
+    ALTER TABLE dbo.StudentUser ADD Telephone NVARCHAR(20) NULL;
+GO
