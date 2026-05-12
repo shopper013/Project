@@ -39,7 +39,8 @@
             </div>
             <div class="header-content">
                 <div class="user-info-section">
-                    <h2 class="user-name" id="display-fullname">นางสาว อรนลิน ชาติรักษา (เคอาร์)</h2>
+                    <h2 class="user-name" id="display-fullname">นางสาว อรนลิน ชาติรักษา</h2>
+                    <h3 class="user-eng-name" id="display-engname" style="color: #666; font-size: 16px; margin-top: -5px; margin-bottom: 15px; font-weight: 400;">Aonnalin Chatraksa</h3>
                     <div class="school-info">
                         <i class="fa-solid fa-building-columns text-blue"></i>
                         <span id="display-school">โรงเรียนหนองจอกพิทยาคม</span>
@@ -57,12 +58,12 @@
                         </div>
                         
                         <div class="info-item">
-                            <div class="info-icon bg-light-orange text-orange">
-                                <i class="fa-solid fa-location-dot"></i>
+                            <div class="info-icon bg-light-purple text-purple">
+                                <i class="fa-solid fa-phone"></i>
                             </div>
                             <div class="info-text">
-                                <label>จังหวัด</label>
-                                <span id="display-province">กรุงเทพมหานคร</span>
+                                <label>เบอร์โทรศัพท์</label>
+                                <span id="display-phone">021-4567893</span>
                             </div>
                         </div>
                         
@@ -73,16 +74,6 @@
                             <div class="info-text">
                                 <label>อีเมล</label>
                                 <span id="display-email">Aonnalin888@gmail.com</span>
-                            </div>
-                        </div>
-                        
-                        <div class="info-item">
-                            <div class="info-icon bg-light-purple text-purple">
-                                <i class="fa-solid fa-phone"></i>
-                            </div>
-                            <div class="info-text">
-                                <label>เบอร์โทรศัพท์</label>
-                                <span id="display-phone">021-4567893</span>
                             </div>
                         </div>
                     </div>
@@ -189,6 +180,36 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/Js/script.js"></script>
     <script>
+        // ฟังก์ชันแปลงวันเกิดเป็นภาษาไทยและคำนวณอายุ
+        function formatThaiBirthday(dateString) {
+            if (!dateString) return '';
+            const months = [
+                "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+                "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+            ];
+            
+            try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return dateString; // Invalid date
+                
+                const day = date.getDate();
+                const month = months[date.getMonth()];
+                const year = date.getFullYear() + 543;
+                
+                // Calculate age
+                const today = new Date();
+                let age = today.getFullYear() - date.getFullYear();
+                const m = today.getMonth() - date.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < date.getDate())) {
+                    age--;
+                }
+                
+                return `${day} ${month} ${year} ( ${age} ปี )`;
+            } catch (e) {
+                return dateString;
+            }
+        }
+
         // ฟังก์ชันดึงข้อมูลจาก Database หรือแสดง Mockup (ตามที่ผู้ใช้ร้องขอ)
         document.addEventListener("DOMContentLoaded", async function() {
             const userId = localStorage.getItem('user_id');
@@ -208,11 +229,19 @@
                         const data = await response.json();
                         if (data.status === 'success' && data.data) {
                             const student = data.data;
+                            if (student.full_name) document.getElementById('display-fullname').textContent = student.full_name;
+                            if (student.eng_name) document.getElementById('display-engname').textContent = student.eng_name;
                             if (student.school) document.getElementById('display-school').textContent = student.school;
-                            if (student.birthday) document.getElementById('display-birthday').textContent = student.birthday;
-                            if (student.province) document.getElementById('display-province').textContent = student.province;
+                            if (student.birthday) document.getElementById('display-birthday').textContent = formatThaiBirthday(student.birthday);
                             if (student.email) document.getElementById('display-email').textContent = student.email;
-                            if (student.telephone) document.getElementById('display-phone').textContent = student.telephone;
+                            if (student.telephone) {
+                                // Add dash format if 10 digits
+                                let phone = student.telephone;
+                                if (phone.length === 10) {
+                                    phone = `${phone.substring(0,3)}-${phone.substring(3,6)}-${phone.substring(6)}`;
+                                }
+                                document.getElementById('display-phone').textContent = phone;
+                            }
                         }
                     } else {
                         console.log("No backend API yet, using mockup data.");

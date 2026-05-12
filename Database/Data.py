@@ -116,7 +116,11 @@ class StudentUser(db.Model):
     UserID = db.Column(db.Integer, primary_key=True, autoincrement=False) # เปลี่ยนให้ตรงกับ UserID ในฐานข้อมูล
     ThaiFirstName = db.Column(db.NVARCHAR(300))
     ThaiLastName = db.Column(db.NVARCHAR(300))
+    EngFirstName = db.Column(db.NVARCHAR(300))
+    EngLastName = db.Column(db.NVARCHAR(300))
     School = db.Column(db.NVARCHAR(100))
+    Birthday = db.Column(db.NVARCHAR(100))
+    Telephone = db.Column(db.NVARCHAR(20))
 
 class TeacherUser(db.Model):
     __tablename__ = 'TeacherUser'
@@ -268,10 +272,10 @@ def student_profile():
                 'username': user.username,
                 'email': user.email,
                 'full_name': f"{student.ThaiFirstName or ''} {student.ThaiLastName or ''}".strip(),
+                'eng_name': f"{student.EngFirstName or ''} {student.EngLastName or ''}".strip(),
                 'school': student.School,
-                'birthday': '',
-                'province': '',
-                'telephone': ''
+                'birthday': student.Birthday,
+                'telephone': student.Telephone
             }
         }), 200
 
@@ -305,8 +309,11 @@ def register():
             UserID=new_user.ID,
             ThaiFirstName=data.get('thai_first_name'),
             ThaiLastName=data.get('thai_last_name'),
-            School=data.get('school')
-            # คุณสามารถเพิ่มคอลัมน์ Email, Telephone ได้ถ้าใน SQL Server สร้างไว้
+            EngFirstName=data.get('eng_first_name', ''),
+            EngLastName=data.get('eng_last_name', ''),
+            School=data.get('school'),
+            Birthday=data.get('birthday', ''),
+            Telephone=data.get('telephone', '')
         )
         db.session.add(new_student)
         db.session.commit()
