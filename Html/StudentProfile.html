@@ -202,7 +202,8 @@
             if (userId) {
                 try {
                     // API ที่จะให้เขียนเพิ่มใน Data.py หรือใช้ mockup ไปก่อน
-                    const response = await fetch(`http://127.0.0.1:5000/api/student/profile?user_id=${userId}`);
+                    const apiBaseUrl = window.API_BASE_URL || 'http://127.0.0.1:5000';
+                    const response = await fetch(`${apiBaseUrl}/api/student/profile?user_id=${userId}`);
                     if (response.ok) {
                         const data = await response.json();
                         if (data.status === 'success' && data.data) {

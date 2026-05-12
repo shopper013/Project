@@ -6,6 +6,8 @@
 const container = document.getElementById('container');
 const officer = document.getElementById('officer');
 const student = document.getElementById('student');
+window.API_BASE_URL = window.API_BASE_URL || 'http://127.0.0.1:5000';
+const API_BASE_URL = window.API_BASE_URL;
 
 
 if (officer) {
@@ -60,7 +62,7 @@ loginForms.forEach(form => {
 
         try {
             // สมมติว่ายิงไปหา Python ที่ http://127.0.0.1:5000/login
-            const response = await fetch('http://127.0.0.1:5000/login', {
+            const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: username, password: password })
@@ -110,7 +112,7 @@ loginForms.forEach(form => {
                     showLoaderOnConfirm: true,
                     preConfirm: async (code) => {
                         try {
-                            const verifyResponse = await fetch('http://127.0.0.1:5000/verify_otp', {
+                            const verifyResponse = await fetch(`${API_BASE_URL}/verify_otp`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ user_id: data.data.user_id, otp_code: code })
@@ -138,6 +140,12 @@ loginForms.forEach(form => {
                         let currentUrl = window.location.href.split('?')[0].split('#')[0];
                         let basePath = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
                         let userRole = (verifyData.data && verifyData.data.role) ? verifyData.data.role.toString().toLowerCase().trim() : '';
+
+                        if (verifyData.data) {
+                            localStorage.setItem('user_full_name', verifyData.data.full_name || '');
+                            localStorage.setItem('user_role', userRole);
+                            localStorage.setItem('user_id', verifyData.data.user_id || '');
+                        }
                         
                         if (userRole === 'admin') {
                             window.location.href = basePath + "/AdminBuild_Activity.html";
@@ -212,7 +220,7 @@ async function submitForm(event) {
     });
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/register', {
+        const response = await fetch(`${API_BASE_URL}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

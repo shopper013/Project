@@ -245,6 +245,41 @@ def verify_otp():
     except Exception as e:
         return jsonify({'status': 'error', 'message': f'Database Error: {str(e)}'}), 500
 
+@app.route('/api/student/profile', methods=['GET'])
+def student_profile():
+    user_id = request.args.get('user_id')
+
+    if not user_id:
+        return jsonify({'status': 'error', 'message': 'Missing user_id'}), 400
+
+    try:
+        user = db.session.get(User, int(user_id))
+        if not user:
+            return jsonify({'status': 'error', 'message': 'User not found'}), 404
+
+        student = StudentUser.query.filter_by(UserID=user.ID).first()
+        if not student:
+            return jsonify({'status': 'error', 'message': 'Student profile not found'}), 404
+
+        return jsonify({
+            'status': 'success',
+            'data': {
+                'user_id': user.ID,
+                'username': user.username,
+                'email': user.email,
+                'full_name': f"{student.ThaiFirstName or ''} {student.ThaiLastName or ''}".strip(),
+                'school': student.School,
+                'birthday': '',
+                'province': '',
+                'telephone': ''
+            }
+        }), 200
+
+    except ValueError:
+        return jsonify({'status': 'error', 'message': 'Invalid user_id'}), 400
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': f'Database Error: {str(e)}'}), 500
+
 @app.route('/register', methods=['POST'])
 def register():
     data = request.json
